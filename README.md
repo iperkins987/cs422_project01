@@ -1,3 +1,12 @@
+# First Steps After Pulling Repository
+Make sure you have react installed on your machine. Then run the followig:
+
+### `npm install`
+
+To Start view the webpage run:
+
+### `npm start`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
