@@ -1,9 +1,14 @@
 # First Steps After Pulling Repository
-Make sure you have react installed on your machine. Then run the followig:
+
+To clone the Repository run:
+
+### `git clone --shared git@github.com:iperkins987/cs422_project01.git`
+
+Make sure you have React installed on your machine. Then run the following:
 
 ### `npm install`
 
-To Start view the webpage run:
+To view the webpage run:
 
 ### `npm start`
 
