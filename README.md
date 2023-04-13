@@ -6,37 +6,19 @@ To clone the repository first make sure you have added your ssh public key to yo
 
 ## Setting up Flask
 
-Next we want to create a python virutal enviroment in the backend. Make sure you are in the backend directory and then run:
-
-### Windows: `python -m venv venv`
-### Mac or Linux: `python3 -m venv venv`
-
-We then need to activate the virutal enviroment:
-
-### Windows: `.\venv\Scripts\activate`
-### Mac or Linux: `source venv/bin/activate`
-
-Then install Flask:
+Install Flask on your machine with:
 
 ### Windows: `pip install flask`
 ### Mac or Linux: `pip3 install flask`
 
-## Setting up React
-
-Move into frontend and run:
-
-### `npm install`
-
 ## How to Run:
 
-First start the backend, so you must start activate the virtual enviroment and then run:
+To launch the site just run the following:
 
 ### Windows: `python backend.py`
 ### Mac or Linux: `python3 backend.py`
 
-Then move to the frontend folder and run:
-
-### `npm start`
+The url should be displayed in the terminal it should be http://127.0.0.1:5000
 
 ## Things to Keep in Mind
 
