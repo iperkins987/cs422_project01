@@ -15,8 +15,8 @@ Install Flask on your machine with:
 
 To launch the site just run the following:
 
-### Windows: `python backend.py`
-### Mac or Linux: `python3 backend.py`
+### Windows: `python main.py`
+### Mac or Linux: `python3 main.py`
 
 The url should be displayed in the terminal it should be http://127.0.0.1:5000
 
