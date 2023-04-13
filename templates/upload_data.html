@@ -3,6 +3,16 @@
 
 {% block content %}
 
-<h1>Hello World</h1>
+<h1>Upload Data</h1>
+    <p>Please insert only time series data in .csv files.</p>
+<body>
 
+    <p>Click on the "Choose File" button to upload a file:</p>
+    
+    <form action="/upload" method="POST" enctype = "multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+    
+</body>
 {% endblock %}

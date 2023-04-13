@@ -1,9 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
+
 
 app = Flask(__name__)
 
 
-# Basic views
 @app.route("/home")
 @app.route("/")
 def home():
@@ -14,6 +14,14 @@ def home():
 def upload_data():
     return render_template("upload_data.html")
 
+#Upload route to ./templates/uploads so when we upload a file it gets stored in uploads.
+@app.route('/upload', methods = ['POST'])  
+def upload():
+    file = request.files['file']
+
+    file.save(f'./templates/uploads/{file.filename}')
+
+    return redirect('/')
 
 @app.route("/download_data")
 def download_data():
