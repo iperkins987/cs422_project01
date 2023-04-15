@@ -1,17 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ url_for('home') }}">ChronoWave</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" id="home" href="{{ url_for('home') }}">Home</a>
-            <a class="nav-item nav-link" id="upload_data" href="{{ url_for('upload_data') }}">Upload Data</a>
-            <a class="nav-item nav-link" id="download_data" href="{{ url_for('download_data') }}">Download Data</a>
-            <a class="nav-item nav-link" id="view_data" href="{{ url_for('view_data') }}">View Data</a>
-            <a class="nav-item nav-link" id="view_history" href="{{ url_for('view_history') }}">View History</a>
-            <a class="nav-item nav-link" id="performance_metrics" href="{{ url_for('performance_metrics') }}">Performance Metrics</a>
-            <a class="nav-item nav-link" id="help" href="{{ url_for('help') }}">Help</a>
+<div class="col-auto px-0">
+    <div id="sidebar" class="collapse collapse-horizontal show border-end">
+        <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+            <h3 class="text-center list-group-item border-end-0">ChronoWave</h3>
+            <a href="{{ url_for('home') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-house"></i> <span>Home</span> </a>
+            <a href="{{ url_for('upload_data') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-upload"></i> <span>Upload Data</span></a>
+            <a href="{{ url_for('download_data') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-download"></i> <span>Download Data</span></a>
+            <a href="{{ url_for('view_data') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-hdd-stack"></i> <span>View Data</span></a>
+            <a href="{{ url_for('view_history') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-clock-history"></i> <span>View History</span></a>
+            <a href="{{ url_for('performance_metrics') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-speedometer"></i> <span>Performance Metrics</span></a>
+            <a href="{{ url_for('help') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i class="bi bi-question-circle"></i> <span>Help</span></a>
         </div>
     </div>
-</nav>
+</div>
