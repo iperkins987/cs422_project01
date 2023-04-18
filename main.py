@@ -1,14 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_pymongo import PyMongo
+from flask import Flask, render_template, request, url_for, redirect, jsonify, send_file
+from flask_pymongo import MongoClient
+from bson.json_util import dumps
+import json
+import re
+
 
 
 app = Flask(__name__)
 
-# MONGO CONNECTION:
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/myDatabase'
-mongo = PyMongo(app)
+client = MongoClient("mongodb+srv://geoffbe0:Password1@cluster0.vqyyuag.mongodb.net/?retryWrites=true&w=majority")
 
+db = client.flask_db
+col = db.folder1
 
+col_results = json.loads(dumps(col.find()))
 @app.route("/home")
 @app.route("/")
 def home():
@@ -20,27 +25,29 @@ def upload_data():
     return render_template("upload_data.html")
 
 #----------------------------------Start TO MONGO routes--------------------
-#Upload route to ./templates/uploads so when we upload a file it gets stored in uploads. Records username with it.
 @app.route('/upload', methods = ['POST'])  
 def upload():
     if 'file' in request.files:
         file = request.files['file']
-        mongo.save_file(file.filename, file)
-        mongo.db.users.insert({'username': request.form.get('username'), 'file' : file.filename})
+        x = json.load(file)
+        col.insert_one(x)
     return redirect('/')    
     
 
-#Way to retrieve data from database
 @app.route('/download_data/<filename>')
 def file(filename):
-    return mongo.send_file(filename)
+    
+    edited = str(filename).replace("'name':", "")
+    edited = re.sub("[{'}]", "", edited)
+    edited.strip()
+    filename = json.loads(dumps(col.find_one({"name":"Test Time Series"}, {"_id": 0})))
+    return filename
 
-#Displays current data in the fs.files within database
-#fs.files can be swapped with whatever the collection is on the MongoDB database
+
 @app.route("/download_data", methods = ['GET'])
 def filenames():
     try:
-        filenames = mongo.db.fs.files.find({})
+        filenames = col.find({}, {"_id": 0, "name": 1})
         return render_template('download_data.html', filenames = filenames)
     except Exception:
         return redirect('/')
