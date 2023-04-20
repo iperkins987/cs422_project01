@@ -11,18 +11,18 @@
                 <th scope="col">Time Series Name</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="myGroup">
             
                 {% for filename in filenames %}
                 <tr>
                     <th scope="row">{{ loop.index }}</th>
                     <td><p>
-                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <a class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseExample{{loop.index}}" role="button" aria-expanded="false" aria-controls="collapseExample{{loop.index}}">
                           {{ filename }}
                         </a>
                       </p>
-                      <div class="collapse" id="collapseExample">
-                        <div class="card card-body">
+                      <div class="collapse multi-collapse" id="collapseExample{{loop.index}}" data-bs-parent="#myGroup">
+                        <div class="card card-body" >
                           <embed id="download_data" src="download_data/{{filename}}">
                         </div>
                       </div>
