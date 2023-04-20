@@ -8,6 +8,7 @@ import re
 
 app = Flask(__name__)
 
+
 client = MongoClient("mongodb+srv://geoffbe0:Password1@cluster0.vqyyuag.mongodb.net/?retryWrites=true&w=majority")
 
 db = client.flask_db
@@ -47,18 +48,26 @@ def file(filename):
 @app.route("/download_data", methods = ['GET'])
 def filenames():
     try:
+
         filenames = col.find({}, {"_id": 0, "name": 1})
-        return render_template('download_data.html', filenames = filenames)
+        filedata = col.find({}, {})
+        # filenames_list = []
+        # for filename in filenames:
+        #     edited = str(filename).replace("'name':", "")
+        #     edited = re.sub("[{'}]", "", edited)
+        #     edited.strip()
+        #     filenames_list.append(edited)
+
+        return render_template('download_data.html', filenames = filenames, filedata = filedata, col = col)
     except Exception:
         return redirect('/')
 
 #-------------------------END OF MONGO----------------------------------#
-    
 
+  
 @app.route("/download_data")
 def download_data():
     return render_template("download_data.html")
-
 
 @app.route("/view_data")
 def view_data():

@@ -4,16 +4,33 @@
 
 {% block content %}
 
-<h1 style="text-decoration: underline;">Download Time Series Data</h1>
-    <h2 style="font-size: 24px">Below Are Some Current Filenames in the Time Series Repository:</h2>
-    <body>
-        
-        {% for filename in filenames %}
-            <li style="font-size: 20px; position: relative; left:80px; top:80px; ">
-                <a id="download_data" href="download_data/{{filename}}"> {{filename}} </a>
-            </li>
-        {% endfor %}
-
-    </body>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Time Series Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+                {% for filename in filenames %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td><p>
+                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                          {{ filename }}
+                        </a>
+                      </p>
+                      <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                          <embed id="download_data" src="download_data/{{filename}}">
+                        </div>
+                      </div>
+                    </td>
+                </tr>
+                {% endfor %}
+              
+            </tbody>
+          </table>
 
 {% endblock %}
