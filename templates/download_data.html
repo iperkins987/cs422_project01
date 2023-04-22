@@ -22,7 +22,10 @@ cutting-edge algorithms to analyze your data and pinpoint any issues.</p>
                     <th scope="row">{{ loop.index }}</th>
                     <td><p>
                         <a class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseExample{{loop.index}}" role="button" aria-expanded="false" aria-controls="collapseExample{{loop.index}}">
-                          {{ filename }}
+                          View Data: {{ filename.name }}
+                        </a>
+                        <a class="btn btn-primary" href="download_data/{{filename}}" role="button" aria-expanded="false">
+                          Download This Data
                         </a>
                       </p>
                       <div class="collapse multi-collapse" id="collapseExample{{loop.index}}" data-bs-parent="#myGroup">

@@ -51,6 +51,8 @@ def filenames():
 
         filenames = col.find({}, {"_id": 0, "name": 1})
         filedata = col.find({}, {})
+        
+        
         # filenames_list = []
         # for filename in filenames:
         #     edited = str(filename).replace("'name':", "")
