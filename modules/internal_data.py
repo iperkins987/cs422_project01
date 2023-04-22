@@ -1,7 +1,12 @@
+import os
+import zipfile
+
 class TimeseriesSet:
     def __init__(self, set_name, set_description, domains,
                  keywords, contributors, reference, link,
-                 timeseries):
+                 timeseries, forecast_task, forecast_ids,
+                 upload_time, retriever):
+        self.upload_time = upload_time 
         self.name = set_name
         self.description = set_description
         self.domains = domains
@@ -9,44 +14,85 @@ class TimeseriesSet:
         self.contributors = contributors
         self.reference = reference
         self.link = link
-        self._timeseries = timeseries #Set of Timeseries instances
+        self.timeseries = timeseries #Set of Timeseries instances
+        self.task = forecast_task 
+        self.forecast_ids = forecast_ids 
+        self._retriever = retriever
     
-    def iter(self):
-        for timeseries in self._timeseries:
-            yield timeseries
+    def get_forecast_ids(self):
+        return self.forecast_ids
+    
+    def get_timeseries_list(self):
+        return self.timeseries
+    
+    def export_to_zip(self, out_dir):
+        files = []
+        for timeseries_id in self.timeseries:
+            timeseries = self._retriever(timeseries_id)
+            train_fname = os.path.join(out_dir, timeseries.name)
+            train_df = timeseries.training_dataset.load_dataset()
+
+            train_data = train_df.to_csv()
+            with open(train_fname, "w") as outfile:
+                outfile.write(train_data)
+            files.append(train_fname)
+
+
+        zip_fname = os.path.join(out_dir, self.name + ".zip")
+        with zipfile.ZipFile(zip_fname, "w") as zfile:
+            for file_name in files:
+                zfile.write(file_name, os.path.basename(file_name))
+        
+        for file_name in files:
+            os.remove(file_name)
+        return zip_fname 
+
+
+class Dataset:
+    def __init__(self, dataset_id, length, period, retriever): 
+        self.dataset_id = dataset_id
+        self.length = length
+        self.period = period
+        self._retriever = retriever
+    
+    def load_dataset(self):
+        if self._retriever is None:
+            return None 
+        return self._retriever(self.dataset_id)
+
+class TimeseriesDescriptor:
+    def __init__(self, timestep_label, measure_labels):
+        self.timestep_label = timestep_label
+        self.measure_labels = measure_labels 
 
 class Timeseries:
-    def __init__(self, timeseries_name, description, domains,
-                 keywords, vector, total_datapoints, sample_period,
-                 training_data, forecast_task):
+    def __init__(self, timeseries_id, timeseries_name, description, domains,
+                 keywords, vector, training_dataset, testing_dataset): 
+        self.timeseries_id = timeseries_id
         self.name = timeseries_name
         self.description = description
         self.domains = domains
         self.keywords = keywords
-        self._vector = vector
-        self.length = total_datapoints
-        self.period = sample_period
-        self._training_data = training_data
-        self._forecast_task = forecast_task
+        self.timeseries_vector = vector
+        self.training_dataset = training_dataset
+        self.testing_dataset = testing_dataset
     
-    #Yields non-standard headers in timeseries DataFrame
-    #along with units in the form (label, unit) 
-    def header_iter(self):
-        for header in self._vector:
-            yield (header['label'], header['unit'])
+        def get_training_metadata(self):
+            return self.training_dataset
+        
+        def get_testing_metadata(self):
+            return self.testing_dataset
+        
+        def get_timeseries_descriptor(self):
+            return self.timeseries_vector
     
-    def training_dataframe(self):
-        return self._training_data
-    
-    def forecast_task(self):
-        return self._forecast_task
-
 class ForecastingTask:
-    def __init__(self, forecast_period, forecast_count, testing_data, test_length):
+    def __init__(self, reference_id, forecast_period, forecast_count): 
         self.period = forecast_period
         self.count = forecast_count
-        self._ground_truth = testing_data
-        self.test_data_length = test_length 
-    
-    def testing_dataframe(self):
-        return self._ground_truth
+        self.parent_timeseries_id = reference_id
+
+class Forecast:
+    def __init__(self, upload_time, results):
+        self.upload_time = upload_time
+        self.forecast_results = results 

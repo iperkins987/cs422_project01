@@ -6,20 +6,23 @@
             "description": "description", 
             "domains": ["domains"], 
             "keywords": ["keywords"], 
-            "vector": [
-                {"label": "label", "unit": "unit"}
-            ],
+            "vector": {
+                "timestep_label": "datetime",
+                "measure_labels": {
+                    "measure": "unit"
+                }
+            },
             "length": 5, 
-            "period": "1m", 
+            "sampling_period": "1m", 
             "training_filename": "training.csv", 
-            "task": {
-                "period": "1m", 
-                "count": 1, 
-                "test_filename": "testing.csv", 
-                "test_length": 1
-            }
+            "testing_filename": "testing.csv" 
         }
     ],
+    "task": {
+        "forecast_period": "1m",
+        "count": 1,
+        "timeseries_name": "timeseries_test"
+    },
     "description": "description", 
     "domains": ["domain"], 
     "keywords": ["keyword"], 
