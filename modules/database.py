@@ -21,7 +21,7 @@ class DatabaseManager:
     
     def get_forecast(self, id):
         doc = self._client.db.forecasts.find_one({'_id': ObjectId(id)})
-        return Forecast(doc['upload_time'], doc['result']) 
+        return Forecast(doc['name'], doc['contributors'], doc['upload_time'], doc['result']) 
     
     def get_dataset(self, id):
         dataset = self._client.db.datasets.find_one({'_id': ObjectId(id)})
@@ -52,8 +52,10 @@ class DatabaseManager:
         return Timeseries(str(doc['_id']), doc['name'], doc['description'], doc['domains'],
                           doc['keywords'], vector, training_dataset, testing_dataset)
     
-    def store_forecast(self, set_id, forecast_result):
+    def store_forecast(self, set_id, forecast_name, contributors, forecast_result):
         doc = {
+            'name': forecast_name,
+            'contributors': contributors,
             'upload_time': datetime.datetime.now().strftime(_date_format),
             'result': forecast_result
         }
@@ -69,8 +71,15 @@ class DatabaseManager:
         #Open metadata file
         metadata = None
         metadata_fname = os.path.join(self._working_dir, 'metadata.json')
+        if not os.path.isfile(metadata_fname):
+            raise Exception("No metadata.json file provided")
+
         with open(metadata_fname, 'r') as file:
             metadata = json.load(file)
+        
+        # Return empty
+        if not self._validate(metadata):
+            raise Exception("Badly formated metadata.json file")
 
         #Create documents and import
         set_id = self._import_timeseries_set(metadata)
@@ -85,9 +94,8 @@ class DatabaseManager:
         #First create Dataset and timeseries objects
         timeseries_ids = {} 
         for timeseries in metadata['timeseries']:
-            timestep_label = timeseries['vector']['timestep_label'],
             training_fname = os.path.join(self._working_dir, timeseries['training_filename'])
-            training_dataset = self._read_dataset_file(training_fname, timestep_label)
+            training_dataset = self._read_dataset_file(training_fname)
             training_dataset_len = len(training_dataset.index)
             training_dataset_id = self._create_dataset_from_dataframe(training_dataset)
 
@@ -95,7 +103,7 @@ class DatabaseManager:
             testing_dataset_len = None 
             if 'testing_filename' in timeseries:
                 testing_fname = os.path.join(self._working_dir, timeseries['testing_filename'])
-                testing_dataset = self._read_dataset_file(testing_fname, timestep_label)
+                testing_dataset = self._read_dataset_file(testing_fname)
                 testing_dataset_len = len(testing_dataset.index)
                 testing_dataset_id = self._create_dataset_from_dataframe(testing_dataset)
             
@@ -109,11 +117,19 @@ class DatabaseManager:
     def _read_timeseries_set(self, id):
         return None
     
-    def _read_dataset_file(self, fname, timestep_label):
-        return pd.read_csv(fname, index_col=timestep_label)
+    def _read_dataset_file(self, fname):
+        ext = fname.split(".")[-1]
+        data = None
+        if ext == 'csv':
+            data = pd.read_csv(fname)
+        elif ext == 'json':
+            data = pd.read_json(fname)
+        elif ext == 'xls' or ext == 'xlsx':
+            data = pd.read_excel(fname)
+        return data
     
     def _create_dataset_from_dataframe(self, df):
-        df_doc = df.to_dict()
+        df_doc = df.to_dict("records")
         mongo_doc = { "data": df_doc }
         id = self._client.db.datasets.insert_one(mongo_doc).inserted_id
         return id 
@@ -166,3 +182,57 @@ class DatabaseManager:
 
         id = self._client.db.timeset.insert_one(mongo_doc).inserted_id
         return id
+
+    def _validate(self, metadata):
+        valid = "name" in metadata and \
+            "timeseries" in metadata and "task" in metadata and \
+            "description" in metadata and "domains" in metadata and \
+            "keywords" in metadata and "contributors" in metadata and \
+            "reference" in metadata and "link" in metadata
+        if not valid:
+            return False
+        
+        #Check to see if unique
+        if self._client.db.timeset.find_one({'_id': metadata["name"]}) is not None:
+            return False
+
+        valid = type(metadata["timeseries"]) is list and \
+            type(metadata["task"]) is dict and type(metadata["description"]) is str and \
+            type(metadata["domains"]) is list and type(metadata["keywords"]) is list and \
+            type(metadata["contributors"]) is list and type(metadata["reference"]) is str and \
+            type(metadata["link"]) is str
+        if not valid:
+            return False
+        
+        task_md = metadata["task"]
+        valid = "forecast_period" in task_md and type(task_md["forecast_period"]) is str and \
+            "count" in task_md and type(task_md["count"]) is int and "timeseries_name" in task_md and \
+            type(task_md["timeseries_name"]) is str
+        if not valid:
+            return False
+        
+        for timeseries_md in metadata["timeseries"]:
+            valid = "name" in timeseries_md and "description" in timeseries_md and \
+                "domains" in timeseries_md and "keywords" in timeseries_md and \
+                "vector" in timeseries_md and "length" in timeseries_md and \
+                "sampling_period" in timeseries_md and "training_filename" in timeseries_md
+            
+            if not valid:
+                return False
+            
+            train_fname = os.path.join(self._working_dir, timeseries_md["training_filename"])
+            if not os.path.isfile(train_fname):
+                return False
+            if "testing_filename" in timeseries_md:
+                test_fname = os.path.join(self._working_dir, timeseries_md["testing_filename"])
+                if not os.path.isfile(test_fname):
+                    return False
+            
+            vector_md = timeseries_md["vector"]
+            valid = "timestep_label" in vector_md and "measure_labels" in vector_md 
+            if not valid:
+                return False
+        return True
+
+
+

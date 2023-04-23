@@ -1,6 +1,10 @@
 import os
 import zipfile
 
+CSV_TYPE = 'csv'
+JSON_TYPE = 'json'
+EXCEL_TYPE = 'xlsx'
+
 class TimeseriesSet:
     def __init__(self, set_name, set_description, domains,
                  keywords, contributors, reference, link,
@@ -25,16 +29,24 @@ class TimeseriesSet:
     def get_timeseries_list(self):
         return self.timeseries
     
-    def export_to_zip(self, out_dir):
+    def export_to_zip(self, out_dir, out_type=CSV_TYPE):
         files = []
         for timeseries_id in self.timeseries:
             timeseries = self._retriever(timeseries_id)
-            train_fname = os.path.join(out_dir, timeseries.name)
+            train_fname = os.path.join(out_dir, timeseries.name + "." + out_type)
             train_df = timeseries.training_dataset.load_dataset()
 
-            train_data = train_df.to_csv()
-            with open(train_fname, "w") as outfile:
-                outfile.write(train_data)
+            train_data = ""
+            if out_type == CSV_TYPE:
+                train_data = train_df.to_csv()
+            elif out_type == JSON_TYPE:
+                train_data = train_df.to_json()
+
+            if out_type == EXCEL_TYPE:
+                train_data = train_df.to_excel(train_fname)
+            else:
+                with open(train_fname, "w") as outfile:
+                    outfile.write(train_data)
             files.append(train_fname)
 
 
@@ -77,14 +89,14 @@ class Timeseries:
         self.training_dataset = training_dataset
         self.testing_dataset = testing_dataset
     
-        def get_training_metadata(self):
-            return self.training_dataset
+    def get_training_metadata(self):
+        return self.training_dataset
         
-        def get_testing_metadata(self):
-            return self.testing_dataset
+    def get_testing_metadata(self):
+        return self.testing_dataset
         
-        def get_timeseries_descriptor(self):
-            return self.timeseries_vector
+    def get_timeseries_descriptor(self):
+        return self.timeseries_vector
     
 class ForecastingTask:
     def __init__(self, reference_id, forecast_period, forecast_count): 
@@ -93,6 +105,8 @@ class ForecastingTask:
         self.parent_timeseries_id = reference_id
 
 class Forecast:
-    def __init__(self, upload_time, results):
+    def __init__(self, forecast_name, contributors, upload_time, results):
+        self.name = forecast_name
+        self.contributors = contributors
         self.upload_time = upload_time
         self.forecast_results = results 
