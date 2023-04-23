@@ -4,7 +4,7 @@ import pymongo
 import zipfile
 import datetime
 import pandas as pd
-from internal_data import *
+from modules.internal_data import *
 from bson.objectid import ObjectId
 
 _date_format = "%Y-%m-%d-%H-%M-%S"
