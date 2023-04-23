@@ -45,9 +45,20 @@ def upload_data():
     return render_template("upload_data.html")
 
 
-@app.route("/download_data")
+@app.route("/download_data", methods=["POST", "GET"])
 def download_data():
-    return render_template("download_data.html")
+    dataset_ids = db_manager.list_set_ids()
+    dataset_id = request.args.get("dataset_id")
+    series_headers = ["datetime", "index"]
+    series_data = [["01/01/01-00:05:00","0"], 
+                   ["01/01/01-00:06:00","1"], 
+                   ["01/01/01-00:07:00","2"]]
+
+    if (dataset_id and dataset_id != "0"):
+        # load time series
+        pass
+
+    return render_template("download_data.html", dataset_ids=dataset_ids, series_headers=series_headers, series_data=series_data)
 
 
 @app.route("/view_data")
