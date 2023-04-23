@@ -1,75 +1,48 @@
 from flask import Flask, render_template, request, url_for, redirect, jsonify, send_file
-from flask_pymongo import MongoClient
-from bson.json_util import dumps
-import json
-import re
+from werkzeug.utils import secure_filename
+import os
+
+from modules.database import DatabaseManager
 
 
-
+# App setup
 app = Flask(__name__)
+app.config["WORKING_DIR"] = "working/"
+
+# Database connection
+db_user = "chrono-user"
+db_password = "ybU62Wj58oNqTm0h"
+db_manager = DatabaseManager(working_dir=app.config["WORKING_DIR"], db_addr=f"mongodb+srv://{db_user}:{db_password}@chronowave.yufcjqt.mongodb.net/?retryWrites=true&w=majority")
 
 
-client = MongoClient("mongodb+srv://geoffbe0:Password1@cluster0.vqyyuag.mongodb.net/?retryWrites=true&w=majority")
-
-db = client.flask_db
-col = db.folder1
-
-col_results = json.loads(dumps(col.find()))
 @app.route("/home")
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-@app.route("/upload_data")
+@app.route("/upload_data", methods=["POST", "GET"])
 def upload_data():
+
+    if (request.method == "POST"):
+        if (request.files):
+            file = request.files["dataset"]
+            file_name = secure_filename(file.filename)
+
+            if (file):
+                file_path = os.path.join(app.config["WORKING_DIR"], file_name)
+                file.save(file_path)
+                db_manager.store_timeseries_set(file_path)
+
+            return redirect(request.url)
+
     return render_template("upload_data.html")
 
-#----------------------------------Start TO MONGO routes--------------------
-@app.route('/upload', methods = ['POST'])  
-def upload():
-    if 'file' in request.files:
-        file = request.files['file']
-        x = json.load(file)
-        col.insert_one(x)
-    return redirect('/')    
-    
 
-@app.route('/download_data/<filename>')
-def file(filename):
-    
-    edited = str(filename).replace("'name':", "")
-    edited = re.sub("[{'}]", "", edited)
-    edited.strip()
-    filename = json.loads(dumps(col.find_one({"name":"Test Time Series"}, {"_id": 0})))
-    return filename
-
-
-@app.route("/download_data", methods = ['GET'])
-def filenames():
-    try:
-
-        filenames = col.find({}, {"_id": 0, "name": 1})
-        filedata = col.find({}, {})
-        
-        
-        # filenames_list = []
-        # for filename in filenames:
-        #     edited = str(filename).replace("'name':", "")
-        #     edited = re.sub("[{'}]", "", edited)
-        #     edited.strip()
-        #     filenames_list.append(edited)
-
-        return render_template('download_data.html', filenames = filenames, filedata = filedata, col = col)
-    except Exception:
-        return redirect('/')
-
-#-------------------------END OF MONGO----------------------------------#
-
-  
 @app.route("/download_data")
 def download_data():
     return render_template("download_data.html")
+
 
 @app.route("/view_data")
 def view_data():
