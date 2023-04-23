@@ -3,41 +3,64 @@
 {% block description %}Examine your data for errors and anomalies.{% endblock %}
 
 {% block content %}
-<p>At ChronoWave we understand the importance of accurate data, that's why our team of experts has developed<br>
-cutting-edge algorithms to analyze your data and pinpoint any issues.</p>
 
-<p>To download your data, simply select the project you would like to download.</p>
+<div class="mb-5">
+    <p>At ChronoWave we understand the importance of accurate data, that's why our team of experts has developed<br>
+    cutting-edge algorithms to analyze your data and pinpoint any issues.</p>
 
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Time Series Name</th>
-              </tr>
-            </thead>
-            <tbody id="myGroup">
-            
-                {% for filename in filenames %}
-                <tr>
-                    <th scope="row">{{ loop.index }}</th>
-                    <td><p>
-                        <a class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapseExample{{loop.index}}" role="button" aria-expanded="false" aria-controls="collapseExample{{loop.index}}">
-                          View Data: {{ filename.name }}
-                        </a>
-                        <a class="btn btn-primary" href="download_data/{{filename}}" role="button" aria-expanded="false">
-                          Download This Data
-                        </a>
-                      </p>
-                      <div class="collapse multi-collapse" id="collapseExample{{loop.index}}" data-bs-parent="#myGroup">
-                        <div class="card card-body" >
-                          <embed id="download_data" src="download_data/{{filename}}">
-                        </div>
-                      </div>
-                    </td>
-                </tr>
-                {% endfor %}
-              
-            </tbody>
-          </table>
+    <p>To download your data, simply select the project you would like to download.</p>
+</div>
+
+<div class="row mb-5">
+    <div class="input-group">
+        <select id="select-dataset" class="form-select">
+            <option value="0" selected>Select a Dataset</option>
+
+            {% for name in dataset_ids %}
+                <option value="{{name}}">{{name}}</option>
+            {% endfor %}
+        </select>
+        <button type="button" class="btn btn-primary ">Download Data</button>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {% for label in series_headers %}
+                <th scope="col">{{label}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in series_data %}
+            <tr>
+
+            {% for data in row %}
+                <td>{{data}}</td>
+            {% endfor %}
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $("#select-dataset").change(function() {
+            $.ajax({
+                url: "",
+                type: "get",
+                contentType: "application/json",
+                data: {
+                    dataset_id: $("#select-dataset").val()
+                },
+                success: function(response) {
+
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}
