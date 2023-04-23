@@ -8,11 +8,17 @@ from modules.database import DatabaseManager
 # App setup
 app = Flask(__name__)
 app.config["WORKING_DIR"] = "working/"
+app.config["ALLOWED_EXTENSIONS"] = {"zip"}
 
 # Database connection
 db_user = "chrono-user"
 db_password = "ybU62Wj58oNqTm0h"
 db_manager = DatabaseManager(working_dir=app.config["WORKING_DIR"], db_addr=f"mongodb+srv://{db_user}:{db_password}@chronowave.yufcjqt.mongodb.net/?retryWrites=true&w=majority")
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
 
 
 @app.route("/home")
@@ -29,7 +35,7 @@ def upload_data():
             file = request.files["dataset"]
             file_name = secure_filename(file.filename)
 
-            if (file):
+            if (file and allowed_file(file.filename)):
                 file_path = os.path.join(app.config["WORKING_DIR"], file_name)
                 file.save(file_path)
                 db_manager.store_timeseries_set(file_path)
