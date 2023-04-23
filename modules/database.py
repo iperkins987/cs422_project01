@@ -21,14 +21,22 @@ class DatabaseManager:
     
     def get_forecast(self, id):
         doc = self._client.db.forecasts.find_one({'_id': ObjectId(id)})
+        if doc is None:
+            return None
+
         return Forecast(doc['name'], doc['contributors'], doc['upload_time'], doc['result']) 
     
     def get_dataset(self, id):
         dataset = self._client.db.datasets.find_one({'_id': ObjectId(id)})
+        if dataset is None:
+            return None
+
         return pd.DataFrame(dataset['data'])
     
     def get_timeseries_set(self, id):
         doc = self._client.db.timeset.find_one({'_id': id})
+        if doc is None:
+            return None
 
         task = ForecastingTask(doc['task']['timeseries_id'], 
                                doc['task']['period'],
@@ -41,6 +49,8 @@ class DatabaseManager:
     
     def get_timeseries(self, id):
         doc = self._client.db.timeseries.find_one({'_id': ObjectId(id)})
+        if doc is None:
+            return None
 
         vector = TimeseriesDescriptor(doc['vector']['timestep_label'], doc['vector']['measure_labels'])
         training_dataset = Dataset(doc['training']['dataset_id'], doc['training']['length'], doc['sampling_period'], self.get_dataset) 
