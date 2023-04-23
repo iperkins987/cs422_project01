@@ -4,24 +4,30 @@
 
 {% block content %}
 
-<p>To get started, simply select the file you want to upload and choose the format that best matches your data. <br>
+<!-- <p>To get started, simply select the file you want to upload and choose the format that best matches your data. <br>
 We support a wide range of formats, including CSV, Excel, JSON, and txt so you can easily upload your data<br>
-regardless of how it's stored.</p>
+regardless of how it's stored.</p> -->
 
-<p>Once your data is uploaded and prepared, you're ready to start analyzing and visualizing your results.<br>
-Simply navigate to the Performance Metrics tab to explore the power of ChronoWave for time series analysis.</p>
+<div class="mb-5">
+    <p>To get started, zip compress the following files, metadata.json, training.csv, and testing.csv.<br>
+    You can then browse your file system by clicking "browse..." under "Upload zip file" below.<br>
+    Select your file and click "Upload".</p>
 
-<p>If you wish, you can download the results from the Download Data tab.</p>
+    <p>Once your data is uploaded and prepared, you're ready to start analyzing and visualizing your results.<br>
+    Simply navigate to the Performance Metrics tab to explore the power of ChronoWave for time series analysis.</p>
 
-<body>
+    <p>If you wish, you can download the results from the Download Data tab.</p>
+</div>
 
-    <p>Click on the "Choose File" button to upload a file:</p>
-    
+<div class="col-4">
     <form action="/upload" method="POST" enctype = "multipart/form-data">
-      Username:<input type="text" name="username">
-      <input type="file" name="file">
-      <input type="submit" value="Upload">
+
+        <div class="mb-3">
+            <label for="file-upload" class="form-label">Upload zip file</label>
+            <input class="form-control" type="file" id="file-upload">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Upload</button>
     </form>
-    
-</body>
+</div>
 {% endblock %}
