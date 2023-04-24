@@ -1,22 +1,26 @@
 {% extends "base.html" %}
 {% block title %}Upload Data{% endblock %}
-{% block description %}Upload your time series data and perpare it for analysis.{% endblock %}
+{% block description %}Upload your time series data and prepare it for analysis.{% endblock %}
 
 {% block content %}
 
-<!-- <p>To get started, simply select the file you want to upload and choose the format that best matches your data. <br>
-We support a wide range of formats, including CSV, Excel, JSON, and txt so you can easily upload your data<br>
-regardless of how it's stored.</p> -->
-
 <div class="mb-5">
-    <p>To get started, zip compress the following files, metadata.json, training.csv, and testing.csv.<br>
+    <!-- <p>To get started, zip compress the following files, metadata.json, training.csv, and testing.csv.<br>
     You can then browse your file system by clicking "browse..." under "Upload zip file" below.<br>
-    Select your file and click "Upload".</p>
+    Select your file and click "Upload".</p> -->
+
+    <p>We're excited to help you analyze your time series data. To get started, make sure your files are compressed<br>
+    in a zip file. ChronoWave accepts JSON, Exel, CSV, and txt files.</p>
+
+    <p>To upload your data, simply click the "Choose File" button, and select your zip file. Once you've selected<br>
+    your file, click the "Upload" button to begin the upload process.</p>
+
+    <p>We know your time is valuable, so we've made our upload process as quick and easy as possible.</p>
 
     <p>Once your data is uploaded and prepared, you're ready to start analyzing and visualizing your results.<br>
-    Simply navigate to the Performance Metrics tab to explore the power of ChronoWave for time series analysis.</p>
+    Simply navigate to the Performance Metrics tab to explore the power of ChronoWave for time series analysis <br>
+    and if you wish to keep your results, simply download the data from the Download Data tab.</p>
 
-    <p>If you wish, you can download the results from the Download Data tab.</p>
 </div>
 
 <div class="col-4">
