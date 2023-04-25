@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 
 from modules.database import DatabaseManager
-
+from modules.internal_data import *
 
 # App setup
 app = Flask(__name__)
@@ -17,8 +17,9 @@ db_manager = DatabaseManager(working_dir=app.config["WORKING_DIR"], db_addr=f"mo
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    file_type = filename.rsplit('.', 1)[1].lower()
+    valid_type = file_type in app.config["ALLOWED_EXTENSIONS"]
+    return ('.' in filename) and valid_type
 
 
 @app.route("/home")
@@ -49,16 +50,39 @@ def upload_data():
 def download_data():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
-    series_headers = ["datetime", "index"]
-    series_data = [["01/01/01-00:05:00","0"], 
-                   ["01/01/01-00:06:00","1"], 
-                   ["01/01/01-00:07:00","2"]]
 
-    if (dataset_id and dataset_id != "0"):
-        # load time series
-        pass
+    # Load metadata
+    if (dataset_id):
+        if (dataset_id == "default"):
+            metadata = False
+        else:
+            ts_set = db_manager.get_timeseries_set(dataset_id)
+            metadata = {
+                "description" : ts_set.description,
+                "domains" : ts_set.domains,
+                "keywords" : ts_set.keywords,
+                "contributors" : ts_set.contributors,
+                "reference" : ts_set.reference,
+                "link" : ts_set.link
+            }
 
-    return render_template("download_data.html", dataset_ids=dataset_ids, series_headers=series_headers, series_data=series_data)
+        return jsonify(metadata)
+
+    return render_template("download_data.html", dataset_ids=dataset_ids)
+
+
+@app.route("/download_as_type", methods=["POST", "GET"])
+def download_type():
+    file_map = {"csv" : CSV_TYPE, "excel" : EXCEL_TYPE, "json" : JSON_TYPE}
+    file_type = request.args.get("file_type")
+    dataset_id = request.args.get("dataset_id")
+
+    if (file_type):
+        ts_set = db_manager.get_timeseries_set(dataset_id)
+        file_name = ts_set.export_to_zip(app.config["WORKING_DIR"], file_map[file_type])
+        return send_file(file_name, as_attachment=True)
+
+    return redirect(url_for("download_data"))
 
 
 @app.route("/view_data")

@@ -9,46 +9,91 @@
     cutting-edge algorithms to analyze your data and pinpoint any issues.</p>
 
     <p>To download your data, first select the project you would like to download from the drop down menu. You can<br>
-        then specify the output format (CSV, Exel, or JSON) to download the data. Once you've made your selections,<br>
+        then specify the output format (CSV, Excel, or JSON) to download the data. Once you've made your selections,<br>
         click the "Download Data" button to begin the download process.</p>
 </div>
 
 <div class="row mb-5">
     <div class="input-group">
         <select id="select-dataset" class="form-select">
-            <option value="0" selected>Select a Dataset</option>
+            <option value="default" selected>Select a Dataset</option>
 
             {% for name in dataset_ids %}
                 <option value="{{name}}">{{name}}</option>
             {% endfor %}
         </select>
-        <button type="button" class="btn btn-primary ">Download Data</button>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="export-as" data-bs-toggle="dropdown">
+                Download as Type
+            </button>
+            <ul id="file-type" class="dropdown-menu">
+                <li><a class="dropdown-item">CSV</a></li>
+                <li><a class="dropdown-item">Excel</a></li>
+                <li><a class="dropdown-item">JSON</a></li>
+            </ul>
+          </div>
     </div>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            {% for label in series_headers %}
-                <th scope="col">{{label}}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in series_data %}
-            <tr>
-
-            {% for data in row %}
-                <td>{{data}}</td>
-            {% endfor %}
-
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div id="metadata" style="display:none">
+    <div class="row mb-5">
+        <div class="col">
+            <h4>Description</h4>
+            <p id="description"></p>
+        </div>
+        <div class="col">
+            <h4>Reference</h4>
+            <p id="reference"></p>
+        </div>
+        <div class="col">
+            <h4>Link</h4>
+            <p id="link"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Contributors</h4>
+            <ul id="contributors" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Keywords</h4>
+            <ul id="keywords" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Domains</h4>
+            <ul id="domains" class="list-group"></ul>
+        </div>
+    </div>
+</div>
 
 <script>
+
+    function render_metadata(response) {
+        // Update description
+        $("#description").text(response.description);
+
+        $("#reference").text(response.reference)
+        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
+
+        // Update contributors
+        response.contributors.forEach(item => {
+            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.keywords.forEach(item => {
+            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.domains.forEach(item => {
+            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
+        });
+    }
+
     $(document).ready(function() {
+
+        // View selected metadata
         $("#select-dataset").change(function() {
             $.ajax({
                 url: "",
@@ -58,9 +103,25 @@
                     dataset_id: $("#select-dataset").val()
                 },
                 success: function(response) {
-
+                    if (response) { 
+                        $("#metadata").show();
+                        render_metadata(response)
+                    } else {
+                        $("#metadata").hide();
+                        $("#contributors").html("");
+                        $("#keywords").html("");
+                        $("#domains").html("");
+                    }
                 }
             });
+        });
+
+        // Download selected file type
+        $("#file-type > li > a").click(function() {
+            let file_type = $(this).text().toLowerCase();
+            let dataset_id = $("#select-dataset").val();
+
+            window.location.href = "download_as_type?file_type=" + file_type + "&dataset_id=" + dataset_id;
         });
     });
 </script>
