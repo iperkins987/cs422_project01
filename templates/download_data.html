@@ -67,6 +67,12 @@
 </div>
 
 <script>
+    function clear_contents() {
+        $("#metadata").hide();
+        $("#contributors").html("");
+        $("#keywords").html("");
+        $("#domains").html("");
+    }
 
     function render_metadata(response) {
         // Update description
@@ -103,14 +109,12 @@
                     dataset_id: $("#select-dataset").val()
                 },
                 success: function(response) {
-                    if (response) { 
+                    if (response) {
+                        clear_contents();
                         $("#metadata").show();
                         render_metadata(response)
                     } else {
-                        $("#metadata").hide();
-                        $("#contributors").html("");
-                        $("#keywords").html("");
-                        $("#domains").html("");
+                        clear_contents();
                     }
                 }
             });
