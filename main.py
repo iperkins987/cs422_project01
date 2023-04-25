@@ -17,8 +17,9 @@ db_manager = DatabaseManager(working_dir=app.config["WORKING_DIR"], db_addr=f"mo
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    file_type = filename.rsplit('.', 1)[1].lower()
+    valid_type = file_type in app.config["ALLOWED_EXTENSIONS"]
+    return ('.' in filename) and valid_type
 
 
 @app.route("/home")
