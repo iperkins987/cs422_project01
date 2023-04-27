@@ -10,4 +10,96 @@ to understand patterns, trends, and potential issues. <br>
 Our advanced algorithms automatically compute a range of performance metrics, including mean absolute error,<br>
 mean average percentage error, correlation coefficient, and more, providing you with accurate and reliable results. </p>
 
+<div class="mb-5">
+    <div class="input-group">
+            <select id="select-dataset" class="form-select" name="selectSet">
+                <option value="default" name="default">Select A Data Set To View Metrics</option>
+                {% for name in dataset_ids %}
+                    <option value="{{name}}" name="{{name}}">{{name}}</option>
+                {% endfor %}
+            </select>
+    </div>
+
+  <div id="metadata" style="display:none">
+    <div class="row mb-5">
+        <div class="col">
+            <h4>Description</h4>
+            <p id="description"></p>
+        </div>
+        <div class="col">
+            <h4>Reference</h4>
+            <p id="reference"></p>
+        </div>
+        <div class="col">
+            <h4>Link</h4>
+            <p id="link"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Contributors</h4>
+            <ul id="contributors" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Keywords</h4>
+            <ul id="keywords" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Domains</h4>
+            <ul id="domains" class="list-group"></ul>
+        </div>
+    </div>
+
+<script>
+
+    function render_metadata(response) {
+        // Update description
+        $("#description").text(response.description);
+
+        $("#reference").text(response.reference)
+        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
+
+        // Update contributors
+        response.contributors.forEach(item => {
+            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.keywords.forEach(item => {
+            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.domains.forEach(item => {
+            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
+        });
+    }
+
+  $(document).ready(function() {
+
+    // View selected metadata
+    $("#select-dataset").change(function() {
+        $.ajax({
+            url: "",
+            type: "get",
+            contentType: "application/json",
+            data: {
+                dataset_id: $("#select-dataset").val()
+            },
+            success: function(response) {
+                if (response) { 
+                    $("#metadata").show();
+                    render_metadata(response)
+                } else {
+                    $("#metadata").hide();
+                    $("#contributors").html("");
+                    $("#keywords").html("");
+                    $("#domains").html("");
+                }
+            }
+        });
+    });
+  });
+
+</script>
 {% endblock %}
