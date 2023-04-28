@@ -107,15 +107,21 @@ def performance_metrics():
         if (dataset_id == "default"):
             metadata = False
         else:
+            timeseries_id = request.args.get("timeseries_id")
             ts_set = db_manager.get_timeseries_set(dataset_id)
+            ts_list = []
+            for timeseries in ts_set.timeseries:
+                ts_list.append(db_manager._client.db.timeseries.find_one({"_id" : timeseries})['name'])
             metadata = {
                 "description" : ts_set.description,
                 "domains" : ts_set.domains,
                 "keywords" : ts_set.keywords,
                 "contributors" : ts_set.contributors,
                 "reference" : ts_set.reference,
-                "link" : ts_set.link
+                "link" : ts_set.link,
+                "timeseries" : ts_list
             }
+                
 
         return jsonify(metadata)
 
