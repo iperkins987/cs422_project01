@@ -10,51 +10,47 @@ to understand patterns, trends, and potential issues. <br>
 Our advanced algorithms automatically compute a range of performance metrics, including mean absolute error,<br>
 mean average percentage error, correlation coefficient, and more, providing you with accurate and reliable results. </p>
 
-<div class="mb-5">
+<div class="row mb-5">
     <div class="input-group">
-            <select id="select-dataset" class="form-select" name="selectSet">
-                <option value="default" name="default">Select A Data Set To View Metrics</option>
-                {% for name in dataset_ids %}
-                    <option value="{{name}}" name="{{name}}">{{name}}</option>
-                {% endfor %}
-            </select>
-            <select id="select-time-series" class="form-select" name="selectTimeSeries" style="display:none">
-                <option value="default" name="default">Select A Time Series To View Metrics</option>
-            </select>
+        <select id="select-dataset" class="form-select">
+            <option value="default" selected>Select a Dataset</option>
+
+            {% for name in dataset_ids %}
+                <option value="{{name}}">{{name}}</option>
+            {% endfor %}
+        </select>
     </div>
 </div>
 
 <div id="metadata" style="display:none">
-<div class="row mb-5">
-    <div class="col">
-        <h4>Description</h4>
-        <p id="description"></p>
+    <div class="row mb-5">
+        <div class="col">
+            <h4>Description</h4>
+            <p id="description"></p>
+        </div>
+        <div class="col">
+            <h4>Reference</h4>
+            <p id="reference"></p>
+        </div>
+        <div class="col">
+            <h4>Link</h4>
+            <p id="link"></p>
+        </div>
     </div>
-    <div class="col">
-        <h4>Reference</h4>
-        <p id="reference"></p>
+    <div class="row">
+        <div class="col">
+            <h4>Contributors</h4>
+            <ul id="contributors" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Keywords</h4>
+            <ul id="keywords" class="list-group"></ul>
+        </div>
+        <div class="col">
+            <h4>Domains</h4>
+            <ul id="domains" class="list-group"></ul>
+        </div>
     </div>
-    <div class="col">
-        <h4>Link</h4>
-        <p id="link"></p>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <h4>Contributors</h4>
-        <ul id="contributors" class="list-group"></ul>
-    </div>
-    <div class="col">
-        <h4>Keywords</h4>
-        <ul id="keywords" class="list-group"></ul>
-    </div>
-    <div class="col">
-        <h4>Domains</h4>
-        <ul id="domains" class="list-group"></ul>
-    </div>
-</div>
-<div>
-    
 </div>
 
 <script>
@@ -63,8 +59,6 @@ mean average percentage error, correlation coefficient, and more, providing you 
         $("#contributors").html("");
         $("#keywords").html("");
         $("#domains").html("");
-        // Hide the selection for timeseries (Its should only be shown when a set is chose)
-        $("#select-time-series").hide();
     }
 
     function render_metadata(response) {
@@ -88,41 +82,6 @@ mean average percentage error, correlation coefficient, and more, providing you 
         response.domains.forEach(item => {
             $("#domains").append("<li class='list-group-item'>" + item + "</li>")
         });
-
-        // Update the selection for "timeseries selection" to show the timeseries respective to the chosen Set
-        // empty 
-        $("#select-time-series").empty()
-        $("#select-time-series").append("<option value='default' name='default'>Select A Time Series To View Metrics</option>")
-        response.timeseries.forEach(item => {
-            $("#select-time-series").append("<option value='" + item + "' name='"+ item +"'>"+ item +"</option>")
-        })
-    }
-
-    // Function specifically for when a timeseries is chosen. Renders everything normally except it doesnt add another duplicate
-    // of the time series within the set.
-    function render_metadata_ts_selection(response) {
-        // Update description
-        $("#description").text(response.description);
-
-        $("#reference").text(response.reference)
-        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
-
-        // Update contributors
-        response.contributors.forEach(item => {
-            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update keywords
-        response.keywords.forEach(item => {
-            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update domains
-        response.domains.forEach(item => {
-            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        $("#select-time-series").show()
     }
 
     $(document).ready(function() {
@@ -134,40 +93,13 @@ mean average percentage error, correlation coefficient, and more, providing you 
                 type: "get",
                 contentType: "application/json",
                 data: {
-                    dataset_id: $("#select-dataset").val(),
-                    timeseries_id: $("#select-time-series").val()
+                    dataset_id: $("#select-dataset").val()
                 },
                 success: function(response) {
                     if (response) {
                         clear_contents();
                         $("#metadata").show();
-                        $("#select-time-series").show()
                         render_metadata(response)
-
-                    } else {
-                        clear_contents();
-                    }
-                }
-            });
-        });
-        
-        //View selected meta data and this is where the plots and data will be shown for the specific selected timeseries.
-        $("#select-time-series").change(function() {
-            $.ajax({
-                url: "",
-                type: "get",
-                contentType: "application/json",
-                data: {
-                    dataset_id: $("#select-dataset").val(),
-                    timeseries_id: $("#select-time-series").val()
-                },
-                success: function(response) {
-                    if (response) {
-                        clear_contents();
-                        $("#metadata").show();
-                        $("#select-time-series").show()
-                        render_metadata_ts_selection(response)
-
                     } else {
                         clear_contents();
                     }
@@ -176,4 +108,5 @@ mean average percentage error, correlation coefficient, and more, providing you 
         });
     });
 </script>
+
 {% endblock %}

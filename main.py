@@ -53,7 +53,6 @@ def upload_data():
 def download_data():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
-
     # Load metadata
     if (dataset_id):
         if (dataset_id == "default"):
@@ -71,7 +70,7 @@ def download_data():
 
         return jsonify(metadata)
 
-    return render_template("download_data.html", dataset_ids=dataset_ids)
+    return render_template("performance_metrics.html", dataset_ids=dataset_ids)
 
 
 @app.route("/download_as_type", methods=["POST", "GET"])
@@ -107,21 +106,15 @@ def performance_metrics():
         if (dataset_id == "default"):
             metadata = False
         else:
-            timeseries_id = request.args.get("timeseries_id")
             ts_set = db_manager.get_timeseries_set(dataset_id)
-            ts_list = []
-            for timeseries in ts_set.timeseries:
-                ts_list.append(db_manager._client.db.timeseries.find_one({"_id" : timeseries})['name'])
             metadata = {
                 "description" : ts_set.description,
                 "domains" : ts_set.domains,
                 "keywords" : ts_set.keywords,
                 "contributors" : ts_set.contributors,
                 "reference" : ts_set.reference,
-                "link" : ts_set.link,
-                "timeseries" : ts_list
+                "link" : ts_set.link
             }
-                
 
         return jsonify(metadata)
 
