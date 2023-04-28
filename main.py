@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, url_for, redirect, jsonify, s
 from werkzeug.utils import secure_filename
 import os
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 from modules.database import DatabaseManager
 from modules.internal_data import *
 
@@ -50,7 +53,6 @@ def upload_data():
 def download_data():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
-
     # Load metadata
     if (dataset_id):
         if (dataset_id == "default"):
@@ -95,10 +97,28 @@ def view_history():
     return render_template("view_history.html")
 
 
-@app.route("/performance_metrics")
+@app.route("/performance_metrics", methods=['GET', 'POST'])
 def performance_metrics():
-    return render_template("performance_metrics.html")
+    dataset_ids = db_manager.list_set_ids()
+    dataset_id = request.args.get("dataset_id")
+    # Load metadata
+    if (dataset_id):
+        if (dataset_id == "default"):
+            metadata = False
+        else:
+            ts_set = db_manager.get_timeseries_set(dataset_id)
+            metadata = {
+                "description" : ts_set.description,
+                "domains" : ts_set.domains,
+                "keywords" : ts_set.keywords,
+                "contributors" : ts_set.contributors,
+                "reference" : ts_set.reference,
+                "link" : ts_set.link
+            }
 
+        return jsonify(metadata)
+
+    return render_template("performance_metrics.html", dataset_ids=dataset_ids)
 
 @app.route("/help")
 def help():

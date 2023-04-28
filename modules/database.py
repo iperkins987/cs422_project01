@@ -47,6 +47,9 @@ class DatabaseManager:
                              doc['link'], doc['timeseries'], task, doc['forecasts'],
                              doc['upload_time'], self.get_timeseries)
     
+    def delete_timeseries_set(self, id):
+        self._client.db.timeset.delete_one({'_id': id})
+    
     def get_timeseries(self, id):
         doc = self._client.db.timeseries.find_one({'_id': ObjectId(id)})
         if doc is None:
