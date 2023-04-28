@@ -89,8 +89,10 @@ mean average percentage error, correlation coefficient, and more, providing you 
             $("#domains").append("<li class='list-group-item'>" + item + "</li>")
         });
 
-        // Update the selection for timeseries selection to show the timeseries respective to the chosen Set
-        $("#select-time-series").show()
+        // Update the selection for "timeseries selection" to show the timeseries respective to the chosen Set
+        // empty 
+        $("#select-time-series").empty()
+        $("#select-time-series").append("<option value='default' name='default'>Select A Time Series To View Metrics</option>")
         response.timeseries.forEach(item => {
             $("#select-time-series").append("<option value='" + item + "' name='"+ item +"'>"+ item +"</option>")
         })
