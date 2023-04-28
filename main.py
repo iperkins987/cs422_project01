@@ -70,7 +70,7 @@ def download_data():
 
         return jsonify(metadata)
 
-    return render_template("performance_metrics.html", dataset_ids=dataset_ids)
+    return render_template("download_data.html", dataset_ids=dataset_ids)
 
 
 @app.route("/download_as_type", methods=["POST", "GET"])
