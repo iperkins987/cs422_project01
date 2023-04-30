@@ -116,5 +116,29 @@ def help():
     return render_template("help.html")
 
 
+@app.route("/admin")
+def admin():
+    dataset_ids = db_manager.list_set_ids()
+    dataset_id = request.args.get("dataset_id")
+    # Load metadata
+    if (dataset_id):
+        if (dataset_id == "default"):
+            metadata = False
+        else:
+            ts_set = db_manager.get_timeseries_set(dataset_id)
+            metadata = {
+                "description" : ts_set.description,
+                "domains" : ts_set.domains,
+                "keywords" : ts_set.keywords,
+                "contributors" : ts_set.contributors,
+                "reference" : ts_set.reference,
+                "link" : ts_set.link
+            }
+
+        return jsonify(metadata)
+
+    return render_template("admin.html", dataset_ids=dataset_ids)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
