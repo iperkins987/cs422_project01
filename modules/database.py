@@ -48,7 +48,21 @@ class DatabaseManager:
                              doc['upload_time'], self.get_timeseries)
     
     def delete_timeseries_set(self, id):
+        tset = self.get_timeseries_set(id)
+        if tset is None:
+            return False
+        
+        for fid in tset.forecast_ids:
+            self._client.db.forecasts.delete_one({'_id': fid})
+        for tseries_id in tset.timeseries:
+            tseries = self.get_timeseries(tseries_id)
+            self._client.db.datasets.delete_one({'_id': tseries.training_dataset.dataset_id})
+            if tseries.testing_dataset is not None:
+                self._client.db.datasets.delete_one({'_id': tseries.testing_dataset.dataset_id})
+            self._client.db.timeseries.delete_one({'_id': tseries_id})
+
         self._client.db.timeset.delete_one({'_id': id})
+        return True
     
     def get_timeseries(self, id):
         doc = self._client.db.timeseries.find_one({'_id': ObjectId(id)})
