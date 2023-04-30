@@ -64,6 +64,15 @@ class DatabaseManager:
         self._client.db.timeset.delete_one({'_id': id})
         return True
     
+    def get_tasked_timeseries(self, tset_id):
+        tset = self.get_timeseries_set(tset_id)
+        if tset is None:
+            return None
+        task = tset.task
+        timeseries_id = task.parent_timeseries_id
+        timeseries = self.get_timeseries(timeseries_id)
+        return timeseries
+    
     def get_timeseries(self, id):
         doc = self._client.db.timeseries.find_one({'_id': ObjectId(id)})
         if doc is None:
