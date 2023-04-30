@@ -87,16 +87,6 @@ def download_type():
     return redirect(url_for("download_data"))
 
 
-@app.route("/view_data")
-def view_data():
-    return render_template("view_data.html")
-
-
-@app.route("/view_history")
-def view_history():
-    return render_template("view_history.html")
-
-
 @app.route("/performance_metrics", methods=['GET', 'POST'])
 def performance_metrics():
     dataset_ids = db_manager.list_set_ids()
@@ -119,6 +109,7 @@ def performance_metrics():
         return jsonify(metadata)
 
     return render_template("performance_metrics.html", dataset_ids=dataset_ids)
+
 
 @app.route("/help")
 def help():
