@@ -11,7 +11,7 @@ from modules.internal_data import *
 # App setup
 app = Flask(__name__)
 app.config["WORKING_DIR"] = "working/"
-app.config["ALLOWED_EXTENSIONS"] = {"zip"}
+app.config["ALLOWED_EXTENSIONS"] = {"zip", "json", "csv", "xlsx"}
 
 # Database connection
 db_user = "chrono-user"
@@ -47,6 +47,28 @@ def upload_data():
             return redirect(request.url)
 
     return render_template("upload_data.html")
+
+
+@app.route("/upload_forcast", methods=["POST", "GET"])
+def upload_forcast():
+    dataset_ids = db_manager.list_set_ids()
+
+    if (request.method == "POST"):
+        if (request.files):
+            file = request.files["dataset"]
+            file_name = secure_filename(file.filename)
+            
+            if (file and allowed_file(file.filename)):
+                file_path = os.path.join(app.config["WORKING_DIR"], file_name)
+                file.save(file_path)
+        
+        print(request.form["dataset-name"])
+        print(request.form["forcast-name"])
+        print(request.form["forcast-contributors"])
+
+        return redirect(request.url)
+
+    return render_template("upload_forcast.html", dataset_ids=dataset_ids)
 
 
 @app.route("/download_data", methods=["POST", "GET"])
