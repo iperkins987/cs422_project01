@@ -138,8 +138,13 @@ def help():
     return render_template("help.html")
 
 
-@app.route("/admin")
+@app.route("/admin", methods = ["POST", "GET"])
 def admin():
+    
+    if request.method == "POST":
+        db_manager.delete_timeseries_set(request.form['select-dataset'])
+
+    
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
     # Load metadata

@@ -6,13 +6,18 @@
 
 <div class="row mb-5">
     <div class="input-group">
-        <select id="select-dataset" class="form-select">
-            <option value="default" selected>Select a Dataset</option>
+        
+            <select name="select-dataset" id="select-dataset" class="form-select" form="setDelete">
+                <option value="default" selected>Select a Dataset</option>
 
-            {% for name in dataset_ids %}
-                <option value="{{name}}">{{name}}</option>
-            {% endfor %}
-        </select>
+                {% for name in dataset_ids %}
+                    <option value="{{name}}">{{name}}</option>
+                {% endfor %}
+            </select>
+            <form id="setDelete" action="admin" method="POST">
+                <input type="submit" value="Remove Time Series Set" class="btn btn-primary">
+            </form>
+        
     </div>
 </div>
 
