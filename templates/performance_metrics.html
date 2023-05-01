@@ -1,10 +1,21 @@
-{% extends "base.html" %}
-{% block title %}Performance Metrics{% endblock %}
-{% block description %}See detailed analysis and metric for your time series data.{% endblock %}
+<!-- Font links -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
+
+<!-- Block title and block description -->
+{% extends "base.html" %}
+{% block title %} <h2 style="font-family: 'El Messiri', sans-serif; font-weight: 300;"> Performance Metrics </h2> {% endblock %}
+{% block description %} <h5 style="font-family: 'Archivo', sans-serif;"> See detailed analysis and metric for your time series data. </h5> {% endblock %}
+
+
+<!-- Block content -->
 {% block content %}
 
-<p>On this page you will find plots that summarize the performance of your time series data, helping you<br>
+<p style= "font-family: 'Open Sans', sans-serif;">On this page you will find plots that summarize the performance of your time series data, helping you<br>
 to understand patterns, trends, and potential issues. <br>
 <br>
 Our advanced algorithms automatically compute a range of performance metrics, including mean absolute error,<br>
