@@ -1,11 +1,20 @@
-{% extends "base.html" %}
-{% block title %}Upload Forcast{% endblock %}
-{% block description %}Store forcast results for model analysis.{% endblock %}
+<!-- Font links -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
+<!-- Block title and block description -->
+{% extends "base.html" %}
+{% block title %} <h2 style="font-family: 'El Messiri', sans-serif; font-weight: 300;"> Upload Forecast </h2> {% endblock %}
+{% block description %} <h5 style="font-family: 'Archivo', sans-serif;"> Store forcast results for model analysis. </h5> {% endblock %}
+
+<!-- Block content -->
 {% block content %}
 
 <div class="mb-5">
-    <p>Select the dataset you would like to upload forcasting results for.</p>
+    <p style= "font-family: 'Open Sans', sans-serif;">Select the dataset you would like to upload forecasting results for.</p>
 </div>
 
 <form action="/upload_forcast" method="POST" enctype = "multipart/form-data">
@@ -21,17 +30,17 @@
     </div>
 
     <div class="mb-3">
-        <label for="forcast-name" class="form-label">The name of the forcast</label>
+        <label for="forcast-name" class="form-label">The name of the forecast</label>
         <input id="forcast-name" name="forcast-name" type="text" class="form-control" placeholder="Forcast Name">
     </div>
 
     <div class="mb-3">
-        <label for="forcast-contributors"" class="form-label">Add forcast contributors seperated by a comma</label>
+        <label for="forcast-contributors"" class="form-label">Add forecast contributors seperated by a comma</label>
         <input id="forcast-contributors" name="forcast-contributors" type="text" class="form-control" placeholder="Forcast Contributors">
     </div>
 
     <div class="mb-3">
-        <label for="file-upload" class="form-label">Upload forcast file</label>
+        <label for="file-upload" class="form-label">Upload forecast file</label>
         <input id="file-upload" class="form-control" name="dataset" type="file">
     </div>
 
