@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 from modules.database import DatabaseManager
 from modules.internal_data import *
+from modules.metrics import *
 
 # App setup
 app = Flask(__name__)
@@ -61,10 +62,10 @@ def upload_forcast():
             if (file and allowed_file(file.filename)):
                 file_path = os.path.join(app.config["WORKING_DIR"], file_name)
                 file.save(file_path)
-        
-        print(request.form["dataset-name"])
-        print(request.form["forcast-name"])
-        print(request.form["forcast-contributors"])
+
+            time_series = db_manager.get_tasked_timeseries(request.form["dataset-name"])
+            data_analyzer = DataAnalyzer(time_series, file_path)
+            db_manager.store_forecast(request.form["dataset-name"], request.form["forcast-name"], request.form["forcast-contributors"].split(","), data_analyzer.calculate_metrics("datetime"))
 
         return redirect(request.url)
 
