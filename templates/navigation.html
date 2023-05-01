@@ -5,10 +5,13 @@
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
 
+<!-- Create and style navigation menu -->
 <div class="col-auto px-0 bg-light">
     <div class="collapse collapse-horizontal show border-end">
         <div class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+            <!-- Title -->
             <h3 class="text-center list-group-item border-end-0 m-0" style = "font-family: 'El Messiri', sans-serif;">ChronoWave</h3>
+            <!-- Tabs -->
             <a href="{{ url_for('home') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" style="font-family: 'Lato', sans-serif;"><i class="bi bi-house"></i> <span>Home</span> </a>
             <a href="{{ url_for('upload_data') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" style="font-family: 'Lato', sans-serif;"><i class="bi bi-upload"></i> <span>Upload Data</span></a>
             <a href="{{ url_for('upload_forcast') }}" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar" style="font-family: 'Lato', sans-serif;"><i class="bi bi-upload"></i> <span>Upload Forcast</span></a>
