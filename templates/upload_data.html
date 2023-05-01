@@ -1,23 +1,28 @@
-{% extends "base.html" %}
-{% block title %}Upload Data{% endblock %}
-{% block description %}Upload your time series data and prepare it for analysis.{% endblock %}
+<!-- Font links -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
+<!-- Block title and block description -->
+{% extends "base.html" %}
+{% block title %} <h2 style="font-family: 'El Messiri', sans-serif; font-weight: 300;"> Upload Data </h2> {% endblock %}
+{% block description %} <h5 style="font-family: 'Archivo', sans-serif;"> Upload your time series data and prepare it for analysis. </h5> {% endblock %}
+
+<!-- Block content -->
 {% block content %}
 
 <div class="mb-5">
-    <!-- <p>To get started, zip compress the following files, metadata.json, training.csv, and testing.csv.<br>
-    You can then browse your file system by clicking "browse..." under "Upload zip file" below.<br>
-    Select your file and click "Upload".</p> -->
-
-    <p>We're excited to help you analyze your time series data. To get started, make sure your files are compressed<br>
+    <p style= "font-family: 'Open Sans', sans-serif;">We're excited to help you analyze your time series data. To get started, make sure your files are compressed<br>
     in a zip file. ChronoWave accepts JSON, Exel, and CSV files.</p>
 
-    <p>To upload your data, simply click the "Choose File" button, and select your zip file. Once you've selected<br>
+    <p style= "font-family: 'Open Sans', sans-serif;">To upload your data, simply click the "Choose File" button, and select your zip file. Once you've selected<br>
     your file, click the "Upload" button to begin the upload process.</p>
 
-    <p>We know your time is valuable, so we've made our upload process as quick and easy as possible.</p>
+    <p style= "font-family: 'Open Sans', sans-serif;">We know your time is valuable, so we've made our upload process as quick and easy as possible.</p>
 
-    <p>Once your data is uploaded and prepared, you're ready to start analyzing and visualizing your results.<br>
+    <p style= "font-family: 'Open Sans', sans-serif;">Once your data is uploaded and prepared, you're ready to start analyzing and visualizing your results.<br>
     Simply navigate to the Performance Metrics tab to explore the power of ChronoWave for time series analysis <br>
     and if you wish to keep your results, simply download the data from the Download Data tab.</p>
 
