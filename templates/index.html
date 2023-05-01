@@ -4,8 +4,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
 
 {% extends "base.html" %}
-<h1 style="font-family: 'Archivo', sans-serif; font-weight: 300;"> {% block title %}Welcome to ChronoWave{% endblock %} </h1>
-<h3 style="font-family: 'Archivo', sans-serif; font-weight: 100;"> {% block description %}A powerful online tool for analyzing and visualizing your time series data.{% endblock %} </h3>
+{% block title %} <h1 style="font-family: 'Archivo', sans-serif; font-weight: 300;"> Welcome to ChronoWave </h1> {% endblock %} 
+{% block description %} <h3 style="font-family: 'Archivo', sans-serif; font-weight: 100;"> A powerful online tool for analyzing and visualizing your time series data. </h3> {% endblock %}
 
 {% block content %}
 
