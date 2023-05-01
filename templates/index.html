@@ -1,24 +1,29 @@
 <!-- Font links -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
+
+<!-- Block title and block description -->
 {% extends "base.html" %}
-{% block title %} <h1 style="font-family: 'Archivo', sans-serif; font-weight: 300;"> Welcome to ChronoWave </h1> {% endblock %} 
-{% block description %} <h3 style="font-family: 'Archivo', sans-serif; font-weight: 100;"> A powerful online tool for analyzing and visualizing your time series data. </h3> {% endblock %}
+{% block title %} <h2 style="font-family: 'El Messiri', sans-serif; font-weight: 300;"> Welcome to ChronoWave </h2> {% endblock %} 
+{% block description %} <h5 style="font-family: 'Archivo', sans-serif;"> A powerful online tool for analyzing and visualizing your time series data. </h5> {% endblock %}
 
+
+<!-- Block content -->
 {% block content %}
 
-<p> style= 
-Whether you are a data scientist, researcher, or simply interested in exploring patterns and trends in your data,<br>
+<p style= "font-family: 'Open Sans', sans-serif;"> Whether you are a data scientist, researcher, or simply interested in exploring patterns and trends in your data,<br>
 ChronoWave offers a user-friendly interface that makes it easy to upload your data, process it, and generate insightful visualizations<br>
 that you can download at any time.</p>
 
-<p>With ChronoWave, you can upload your data in a variety of formats like JSON, CSV, and Excel. Our advanced algorithms can then analyze<br>
+<p style= "font-family: 'Open Sans', sans-serif;"> With ChronoWave, you can upload your data in a variety of formats like JSON, CSV, and Excel. Our advanced algorithms can then analyze<br>
 your data and compute a range of error metrics including Mean Absolute Error (MAE), Mean Average Percentage Error (MAPE),<br>
 Symmetric Mean Average Percentage Error (SMAPE), Mean Square Error (MSE), Root Mean Square Error (RMSE), and Correlation Coefficient,<br>
 allowing you to identify trends, anomalies, and potential issues that might be affecting your results.</p>
 
-<p>Start exploring the power of time series analysis with ChronoWave today!</p>
+<p style= "font-family: 'Open Sans', sans-serif;"> Start exploring the power of time series analysis with ChronoWave today!</p>
 
 {% endblock %}
