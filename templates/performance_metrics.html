@@ -91,7 +91,7 @@ mean average percentage error, correlation coefficient, and more, providing you 
             <p id="rmse"></p>
         </div>
         <div class="col">
-            <h4>Correlation Coefficient</h4>
+            <h4>Corr Coeff</h4>
             <p id="corr"></p>
         </div>
     </div>
@@ -110,6 +110,7 @@ mean average percentage error, correlation coefficient, and more, providing you 
         $("#smape").html("");
         $("#mse").html("");
         $("#rmse").html("");
+        $("#corr").html("");
     }
 
     function render_metadata(response) {
@@ -177,7 +178,7 @@ mean average percentage error, correlation coefficient, and more, providing you 
         //update rmse
         $("#rmse").text(response.rmse);
         //update corr coeff
-        //$().text(response.)
+        $("#corr").text(response.corr)
     }
 
     $(document).ready(function() {
