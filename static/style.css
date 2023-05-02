@@ -7,6 +7,14 @@ h2 {
     font-weight: 300;
 }
 
+h4 {
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
 h5 {
     font-family: 'Archivo', sans-serif;
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
 }
