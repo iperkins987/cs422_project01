@@ -63,17 +63,14 @@ class DataAnalyzer:
         rmse = np.sqrt(mse)
     
         # Calculating the correlation coefficient
-        # We use the formula for population covariance np.cov() and standard deviation np.std
-        # actual.T and predicted.T are the transpose of the original arrays
-        # ddof means degrees of freedom meaning that the calculation should assume that the two arrays being passed in (actual and predicted) 
-            # represent the entire population, rather than a sample of the population. In this case, there is no sample population
-        # cov = np.cov(actual.T, predicted.T, ddof=0)[0][1]
-        # std_actual = np.std(actual, ddof=0)
-        # std_predicted = np.std(predicted, ddof=0)
-        # corr_coeff = cov / (std_actual * std_predicted)
+        # Check if the actual and predicted datasets are empty or have null values, if they are then return NaN
+        if len(actual) > 1 and len(predicted) > 1:
+            corr = np.corrcoef(np.array(actual).flatten(), np.array(predicted).flatten())[0, 1]
+        else:
+            corr = np.nan
         
-        # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "CORRELATION COEFFICIENT": corr_coeff}
-        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
+        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "Correlation Coefficient": corr}
+        # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
 
     # Plotting results
     def plot_results(self, actual_col: str, predicted_col: str) -> None:
