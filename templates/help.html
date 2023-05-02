@@ -34,11 +34,11 @@ analyze it, and visualize your results. </p>
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body" style= "font-family: 'Lato', sans-serif; font-weight: 300;">
-        <strong>Step 1. </strong> Compress your JSON, CSV, or Exel files in a single zip file. <br>
-      	<strong>Step 2. </strong> Navigate to the Upload Data tab.<br>
-        <strong>Step 3. </strong> Click the "Choose File" button and select you zip file. <br>
-        <strong>Step 4. </strong> Once you're satisfied with you time series data, click the "Upload" button to upload you data to ChronoWave
-        and start analyzing your time series data.
+        <strong>Step 1. </strong> Create a metadata.json file that describes your timeseries files. <br>
+        <strong>Step 2. </strong> Compress your metadata.json and JSON, CSV, or Excel timeseries files in a single zip file. <br>
+      	<strong>Step 3. </strong> Navigate to the Upload Data tab.<br>
+        <strong>Step 4. </strong> Click the "Choose File" button and select you zip file. <br>
+        <strong>Step 5. </strong> Click Upload! <br> 
       </div>
     </div>
   </div>
@@ -47,18 +47,50 @@ analyze it, and visualize your results. </p>
    <div class="accordion-item">
     <h2 class="accordion-header" id="headingTwo" style= "font-family: 'Roboto', sans-serif;">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        How do I upload a time series set?
+        What format should the metadata.json file be in? 
       </button>
     </h2>
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
       <div class="accordion-body" style= "font-family: 'Lato', sans-serif; font-weight: 300;">
-        <strong>Step 1. </strong> Compress your files in a single zip file.<br>
-        <strong>Step 2. </strong> Navigate to the Upload Data tab.<br>
-        <strong>Step 3. </strong> Select the file you want to upload by clicking on the "Choose File" button. ChronoWave supports a wide range of file formats,
-        including CSV, Exel, and JSON, so you can upload your data in the format that best suits your needs.<br>
-        <strong>Step 4. </strong> Click the "Upload" button to upload your data set to ChronoWave.<br>
-        <strong>Step 5. </strong> Wait for ChronoWave to process your data set. This may take a few seconds or minutes, depending on the size of your data set.
-      </div>
+        <strong>Example metadata.json. </strong> 
+        <br>
+        <pre>
+        {
+            "name": "timeseries set name", // name of timeseries set 
+            "timeseries": [
+                {
+                    "name": "timeseries one name", // name of timeseries 
+                    "description": "timeseries description", 
+                    "domains": ["domains"], 
+                    "keywords": ["keywords"], 
+                    "vector": {
+                        "timestep_label": "datetime", // time column name in timeseries
+                        "measure_labels": {
+                            "measure": "unit" // non-time (column, unit) pairs in timeseries
+                        }
+                    },
+                    "length": 5, 
+                    "sampling_period": "1m", 
+                    "training_filename": "training.csv", // filename containing training data 
+                    "testing_filename": "testing.csv"  // filename containing testing data(optional)
+                                                      // required for timeseries specified in forecasting task
+                }
+            ],
+            "task": { // forecasting task description
+                "forecast_period": "1m", 
+                "count": 1, // number of forecast points to generate
+                "timeseries_name": "timeseries_test" // name of timeseries to forecast for
+            },
+            "description": "description", 
+            "domains": ["domain"], 
+            "keywords": ["keyword"], 
+            "contributors": ["contributor"], 
+            "reference": "reference", 
+            "link": "link" 
+        }
+        </pre>
+
+        </div>
     </div>
   </div>
 
@@ -66,12 +98,12 @@ analyze it, and visualize your results. </p>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingThree" style= "font-family: 'Roboto', sans-serif;">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Is it possible to download data from ChronoWave?
+        How do I download timeseries data from ChronoWave?
       </button>
     </h2>
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
       <div class="accordion-body" style= "font-family: 'Lato', sans-serif; font-weight: 300;">
-      	Certainly! You can download data from ChronoWave in just a few simple steps:<br>
+      	You can download data from ChronoWave in just a few simple steps:<br>
         <strong>Step 1. </strong> Navigate to the Dowload Data tab.<br>
         <strong>Step 2. </strong> Select the time series data set you want to download from the drop down menu of available data sets.<br>
         <strong>Step 3. </strong> Choose the desired output format, it can be CSV, Exel, or JSON.<br>
@@ -86,20 +118,35 @@ analyze it, and visualize your results. </p>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingFour" style= "font-family: 'Roboto', sans-serif;">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-        Can I visualize the time series data set analysis result?
+        How do I upload my forecast for a timeseries set?
       </button>
     </h2>
     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
       <div class="accordion-body" style= "font-family: 'Lato', sans-serif; font-weight: 300;">
-      	Absolutely! To view and download time series data set plots from the Performance Metrics tab in ChronoWave, follow these steps:<br>
-        <strong>Step 1. </strong> Navigate to the Performance Metrics tab on the Chronowavw website.<br>
-        <strong>Step 2. </strong> Select the time series data set you want to view from the list of available data sets.<br>
-        <strong>Step 3. </strong> Choose the desired performance metric from the dropdown menu. This will generate a plot showing the performance metric over time.<br>
-        <strong>Step 4. </strong> If you are satisfied with the plot, you can download it by clicking the "Download" button. This will save the plot in a high-resolution image format, such as PNG or SVG. <br>
-        <strong>Step 5. </strong> If you want to download the raw time series data set, click on the "Download Data" button. This will download the data set in the format your choice (CSV, Exel, or JSON). <br>
+      	To upload your forecast to ChronoWave, follow these steps:<br>
+        <strong>Step 1. </strong> Navigate to the Upload Forecast tab on the Chronowave website.<br>
+        <strong>Step 2. </strong> Fill out the form describing your forecast model name and contributors. <br> 
+        <strong>Step 3. </strong> Upload a single CSV, JSON, or Excel forecast file that has the same column names as the training dataset. <br> 
+        <strong>Step 4. </strong> Click Upload! Once your forecast is processed, it should be viewable on the Performance Metrics page. <br> 
       </div>
     </div>
   </div>
+
+  <!-- Fifth tab/Fifth question -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFive" style= "font-family: 'Roboto', sans-serif;">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+        Can I view the error metrics of other peoples forecasts?
+      </button>
+    </h2>
+    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+      <div class="accordion-body" style= "font-family: 'Lato', sans-serif; font-weight: 300;">
+        Yes! Just go to the performance metrics tab and select the timeseries set you want to see forecast metrics for. <br>
+        There will be a dropdown to select different forecasts to view. The forecasts are listed in order of Mean Average Error. <br>
+      </div>
+    </div>
+  </div>
+
 
 </div>
 
