@@ -63,7 +63,7 @@ class DataAnalyzer:
         rmse = np.sqrt(mse)
     
         # Calculating the correlation coefficient
-        # Check if the actual and predicted datasets are empty or have null values, if they are then return NaN
+        # Check if the actual and predicted datasets are empty, have null values, or has only 1 element. If they are then return NaN
         if len(actual) > 1 and len(predicted) > 1:
             corr = np.corrcoef(np.array(actual).flatten(), np.array(predicted).flatten())[0, 1]
         else:
