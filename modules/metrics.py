@@ -50,9 +50,18 @@ class DataAnalyzer:
         smape = 2 * np.mean(np.abs(predicted - actual) / (np.abs(actual) + np.abs(predicted))) * 100
         mse = mean_squared_error(actual, predicted)
         rmse = np.sqrt(mse)
-        # corr_coef, _ = pearsonr(actual, predicted)
+    
+        # Calculating the correlation coefficient
+        # We use the formula for population covariance np.cov() and standard deviation np.std
+        # actual.T and predicted.T are the transpose of the original arrays
+        # ddof means degrees of freedom meaning that the calculation should assume that the two arrays being passed in (actual and predicted) 
+            # represent the entire population, rather than a sample of the population. In this case, there is no sample population
+        cov = np.cov(actual.T, predicted.T, ddof=0)[0][1]
+        std_actual = np.std(actual, ddof=0)
+        std_predicted = np.std(predicted, ddof=0)
+        corr_coeff = cov / (std_actual * std_predicted)
         
-        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
+        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "CORRELATION COEFFICIENT": corr_coeff}
 
     # Plotting results
     def plot_results(self, actual_col: str, predicted_col: str) -> None:
