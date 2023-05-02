@@ -41,10 +41,21 @@ class DataAnalyzer:
         return df
 
     #  Calculate the performance metrics and return them as a dictionary.        
-    def calculate_metrics(self, index_col: str) -> Dict[str, Union[float, np.ndarray]]:
-        actual = self.time_series.get_testing_metadata().load_dataset().drop(columns=index_col)
-        predicted = self.read_data().drop(columns=index_col)
-        
+    def calculate_metrics(self) -> Dict[str, Union[float, np.ndarray]]:
+        index_col = self.time_series.get_timeseries_descriptor().timestep_label
+
+        actual = self.time_series.get_testing_metadata().load_dataset()
+        predicted = self.read_data()
+
+        if (actual.shape[0] > predicted.shape[0]):
+            actual = actual[actual[index_col].isin(predicted[index_col])]
+
+        elif (actual.shape[0] < predicted.shape[0]):
+            predicted = predicted[predicted[index_col].isin(actual[index_col])]
+
+        actual = actual.drop(columns=index_col)
+        predicted = predicted.drop(columns=index_col)
+
         mae = mean_absolute_error(actual, predicted)
         mape = np.mean(np.abs((actual - predicted) / actual)) * 100
         smape = 2 * np.mean(np.abs(predicted - actual) / (np.abs(actual) + np.abs(predicted))) * 100
@@ -56,12 +67,13 @@ class DataAnalyzer:
         # actual.T and predicted.T are the transpose of the original arrays
         # ddof means degrees of freedom meaning that the calculation should assume that the two arrays being passed in (actual and predicted) 
             # represent the entire population, rather than a sample of the population. In this case, there is no sample population
-        cov = np.cov(actual.T, predicted.T, ddof=0)[0][1]
-        std_actual = np.std(actual, ddof=0)
-        std_predicted = np.std(predicted, ddof=0)
-        corr_coeff = cov / (std_actual * std_predicted)
+        # cov = np.cov(actual.T, predicted.T, ddof=0)[0][1]
+        # std_actual = np.std(actual, ddof=0)
+        # std_predicted = np.std(predicted, ddof=0)
+        # corr_coeff = cov / (std_actual * std_predicted)
         
-        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "CORRELATION COEFFICIENT": corr_coeff}
+        # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "CORRELATION COEFFICIENT": corr_coeff}
+        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
 
     # Plotting results
     def plot_results(self, actual_col: str, predicted_col: str) -> None:

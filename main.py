@@ -65,7 +65,7 @@ def upload_forcast():
 
             time_series = db_manager.get_tasked_timeseries(request.form["dataset-name"])
             data_analyzer = DataAnalyzer(time_series, file_path)
-            db_manager.store_forecast(request.form["dataset-name"], request.form["forcast-name"], request.form["forcast-contributors"].split(","), data_analyzer.calculate_metrics("datetime"))
+            db_manager.store_forecast(request.form["dataset-name"], request.form["forcast-name"], request.form["forcast-contributors"].split(","), data_analyzer.calculate_metrics())
 
         return redirect(request.url)
 
