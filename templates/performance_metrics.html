@@ -31,6 +31,9 @@ mean average percentage error, correlation coefficient, and more, providing you 
                 <option value="{{name}}">{{name}}</option>
             {% endfor %}
         </select>
+        <select id="select-forecast" class="form-select" style="display:none">
+            <option value="default" name="default">Select A Forecast To View Metrics</option>
+        </select>
     </div>
 </div>
 
@@ -65,12 +68,44 @@ mean average percentage error, correlation coefficient, and more, providing you 
     </div>
 </div>
 
+<div id="metrics" style="display: none;">
+    <div class="row mb-5">
+        <div class="col">
+            <h4>MAE</h4>
+            <p id="mae"></p>
+        </div>
+        <div class="col">
+            <h4>MAPE</h4>
+            <p id="mape"></p>
+        </div>
+        <div class="col">
+            <h4>SMAPE</h4>
+            <p id="smape"></p>
+        </div>
+        <div class="col">
+            <h4>MSE</h4>
+            <p id="mse"></p>
+        </div>
+        <div class="col">
+            <h4>RMSE</h4>
+            <p id="rmse"></p>
+        </div>
+    </div>
+</div>
+
 <script>
     function clear_contents() {
         $("#metadata").hide();
         $("#contributors").html("");
         $("#keywords").html("");
         $("#domains").html("");
+
+        $("#metrics").hide();
+        $("#mae").html("");
+        $("#mape").html("");
+        $("#smape").html("");
+        $("#mse").html("");
+        $("#rmse").html("");
     }
 
     function render_metadata(response) {
@@ -94,6 +129,49 @@ mean average percentage error, correlation coefficient, and more, providing you 
         response.domains.forEach(item => {
             $("#domains").append("<li class='list-group-item'>" + item + "</li>")
         });
+
+        $("#select-forecast").empty()
+        $("#select-forecast").append("<option value='default' name='default'>Select A Forecast To View Metrics</option>")
+        response.forecasts.forEach(item => {
+            $("#select-forecast").append("<option value='" + item + "' name='"+ item +"'>"+ item +"</option>")
+        })
+
+        $("#select-forecast").show()
+    }
+
+
+    function render_metrics(response){
+        // Update description
+        $("#description").text(response.description);
+
+        $("#reference").text(response.reference)
+        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
+
+        // Update contributors
+        response.contributors.forEach(item => {
+            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.keywords.forEach(item => {
+            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        // Update contributors
+        response.domains.forEach(item => {
+            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
+        });
+
+        //update mae
+        $("#mae").text(response.mae);
+        //update mape
+        $("#mape").text(response.mape);
+        //update smape
+        $("#smape").text(response.smape);
+        //update mse
+        $("#mse").text(response.mse);
+        //update rmse
+        $("#rmse").text(response.rmse);
     }
 
     $(document).ready(function() {
@@ -105,13 +183,37 @@ mean average percentage error, correlation coefficient, and more, providing you 
                 type: "get",
                 contentType: "application/json",
                 data: {
-                    dataset_id: $("#select-dataset").val()
+                    dataset_id: $("#select-dataset").val(), forecast_name: $("select-forecast").val()
                 },
                 success: function(response) {
                     if (response) {
                         clear_contents();
                         $("#metadata").show();
-                        render_metadata(response)
+                        render_metadata(response);
+                    } else {
+                        clear_contents();
+                    }
+                }
+            });
+        });
+
+        $("#select-forecast").change(function() {
+            $.ajax({
+                url: "",
+                type: "get",
+                contentType: "application/json",
+                data: {
+                    dataset_id: $("#select-dataset").val(), 
+                    forecast_name: $("#select-forecast").val()
+                },
+                success: function(response) {
+                    if (response) {
+                        clear_contents()
+                        $("#metadata").show()
+                        if (response.mae) {
+                            $("#metrics").show();
+                        }
+                        render_metrics(response);
                     } else {
                         clear_contents();
                     }

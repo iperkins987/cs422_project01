@@ -120,15 +120,46 @@ def performance_metrics():
             metadata = False
         else:
             ts_set = db_manager.get_timeseries_set(dataset_id)
-            metadata = {
-                "description" : ts_set.description,
-                "domains" : ts_set.domains,
-                "keywords" : ts_set.keywords,
-                "contributors" : ts_set.contributors,
-                "reference" : ts_set.reference,
-                "link" : ts_set.link
-            }
-
+            forecast_name = request.args.get("forecast_name")
+            forecast_names = []
+            forecast_ids = []
+            for fc_id in ts_set.forecast_ids:
+                forecast_names.append(db_manager.get_forecast(fc_id).name)
+                forecast_ids.append(fc_id)
+            
+            #If goes through if a forecast name was selected              
+            if (forecast_name) and (forecast_name != "default"):
+                i = 0
+                #Get the forecast id index corresponding to the forecast name:
+                while (forecast_names[i] != forecast_name):
+                    i += 1
+                forecast = db_manager.get_forecast(forecast_ids[i])    
+                metadata = {
+                    "description" : ts_set.description,
+                    "domains" : ts_set.domains,
+                    "keywords" : ts_set.keywords,
+                    "contributors" : ts_set.contributors,
+                    "reference" : ts_set.reference,
+                    "link" : ts_set.link,
+                    "forecasts" : forecast_names,
+                    "mae" : forecast.forecast_results["MAE"],
+                    "mape" : forecast.forecast_results["MAPE"],
+                    "smape" : forecast.forecast_results["SMAPE"],
+                    "mse" : forecast.forecast_results["MSE"],
+                    "rmse" : forecast.forecast_results["RMSE"]
+                }
+            #No forecast name is selected yet
+            else:
+                metadata = {
+                        "description" : ts_set.description,
+                        "domains" : ts_set.domains,
+                        "keywords" : ts_set.keywords,
+                        "contributors" : ts_set.contributors,
+                        "reference" : ts_set.reference,
+                        "link" : ts_set.link,
+                        "forecasts" : forecast_names           
+                    }
+            
         return jsonify(metadata)
 
     return render_template("performance_metrics.html", dataset_ids=dataset_ids)
