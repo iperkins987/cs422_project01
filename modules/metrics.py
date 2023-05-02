@@ -69,7 +69,7 @@ class DataAnalyzer:
         else:
             corr = np.nan
         
-        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "Correlation Coefficient": corr}
+        return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "corr": corr}
         # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
 
     # Plotting results
