@@ -90,6 +90,10 @@ mean average percentage error, correlation coefficient, and more, providing you 
             <h4>RMSE</h4>
             <p id="rmse"></p>
         </div>
+        <div class="col">
+            <h4>Correlation Coefficient</h4>
+            <p id="corr"></p>
+        </div>
     </div>
 </div>
 
@@ -172,6 +176,8 @@ mean average percentage error, correlation coefficient, and more, providing you 
         $("#mse").text(response.mse);
         //update rmse
         $("#rmse").text(response.rmse);
+        //update corr coeff
+        //$().text(response.)
     }
 
     $(document).ready(function() {
