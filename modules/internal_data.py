@@ -1,4 +1,5 @@
 import os
+import json
 import zipfile
 
 CSV_TYPE = 'csv'
@@ -31,10 +32,20 @@ class TimeseriesSet:
     
     def export_to_zip(self, out_dir, out_type=CSV_TYPE):
         files = []
+
+        forecast_info = {
+            "forecast_period": self.task.period, 
+            "forecast_count": self.task.count
+        }
+
         for timeseries_id in self.timeseries:
             timeseries = self._retriever(timeseries_id)
             train_fname = os.path.join(out_dir, timeseries.name + "." + out_type)
             train_df = timeseries.training_dataset.load_dataset()
+
+            if timeseries_id == self.task.parent_timeseries_id:
+                forecast_info["relevant_timeseries"] = timeseries.name
+
 
             train_data = ""
             if out_type == CSV_TYPE:
@@ -48,6 +59,11 @@ class TimeseriesSet:
                 with open(train_fname, "w") as outfile:
                     outfile.write(train_data)
             files.append(train_fname)
+        
+        info_fname = os.path.join(out_dir, "forecast_info.json")
+        with open(info_fname, "w") as outfile:
+            json.dump(forecast_info, outfile) 
+        files.append(info_fname)
 
 
         zip_fname = os.path.join(out_dir, self.name + ".zip")
