@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, jsonify, send_file
+from flask import Flask, render_template, request, url_for, redirect, jsonify, send_file, flash
 from werkzeug.utils import secure_filename
 import os
 
@@ -11,6 +11,7 @@ from modules.metrics import *
 
 # App setup
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["WORKING_DIR"] = "working/"
 app.config["ALLOWED_EXTENSIONS"] = {"zip", "json", "csv", "xlsx"}
 
@@ -34,7 +35,6 @@ def home():
 
 @app.route("/upload_data", methods=["POST", "GET"])
 def upload_data():
-
     if (request.method == "POST"):
         if (request.files):
             file = request.files["dataset"]
@@ -43,7 +43,11 @@ def upload_data():
             if (file and allowed_file(file.filename)):
                 file_path = os.path.join(app.config["WORKING_DIR"], file_name)
                 file.save(file_path)
-                db_manager.store_timeseries_set(file_path)
+
+                try:
+                    db_manager.store_timeseries_set(file_path)
+                except Exception as e:
+                    flash(str(e))
 
             return redirect(request.url)
 

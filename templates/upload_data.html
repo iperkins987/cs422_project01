@@ -35,6 +35,14 @@
             <input id="file-upload" class="form-control" name="dataset" type="file" accept=".zip">
         </div>
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                 {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
 </div>
