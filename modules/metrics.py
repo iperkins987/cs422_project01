@@ -88,6 +88,10 @@ class DataAnalyzer:
         plt.xlabel("Actual Values")
         plt.ylabel("Predicted Values")
         plt.title("Actual vs Predicted Values")
+        plt.grid(True)
+
+        # Save plot in a PNG file in the current directory
+        plt.savefig('plot.png')
 
         # Show plot
         plt.show()
