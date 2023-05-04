@@ -121,8 +121,9 @@ class ForecastingTask:
         self.parent_timeseries_id = reference_id
 
 class Forecast:
-    def __init__(self, forecast_name, contributors, upload_time, results):
+    def __init__(self, forecast_name, contributors, upload_time, plot_id, results):
         self.name = forecast_name
         self.contributors = contributors
         self.upload_time = upload_time
+        self.plot_id = plot_id
         self.forecast_results = results 

@@ -1,9 +1,11 @@
+import io
 import os
 import json
 import pymongo
 import zipfile
 import datetime
 import pandas as pd
+from PIL import Image
 from modules.internal_data import *
 from bson.objectid import ObjectId
 
@@ -24,7 +26,10 @@ class DatabaseManager:
         if doc is None:
             return None
 
-        return Forecast(doc['name'], doc['contributors'], doc['upload_time'], doc['result']) 
+        return Forecast(doc['name'], doc['contributors'], doc['upload_time'], doc['plot_id'], doc['result']) 
+    
+    def get_plot(self, id, out_fname):
+        return self._get_image(ObjectId(id), out_fname)
     
     def get_dataset(self, id):
         dataset = self._client.db.datasets.find_one({'_id': ObjectId(id)})
@@ -52,8 +57,11 @@ class DatabaseManager:
         if tset is None:
             return False
         
+        print(tset.forecast_ids)
         for fid in tset.forecast_ids:
-            self._client.db.forecasts.delete_one({'_id': fid})
+            forecast = self.get_forecast(fid)
+            self._client.db.images.delete_one({'_id': forecast.plot_id})
+            self._client.db.forecasts.delete_one({'_id': ObjectId(fid)})
         for tseries_id in tset.timeseries:
             tseries = self.get_timeseries(tseries_id)
             self._client.db.datasets.delete_one({'_id': tseries.training_dataset.dataset_id})
@@ -88,11 +96,16 @@ class DatabaseManager:
         return Timeseries(str(doc['_id']), doc['name'], doc['description'], doc['domains'],
                           doc['keywords'], vector, training_dataset, testing_dataset)
     
-    def store_forecast(self, set_id, forecast_name, contributors, forecast_result):
+    def store_forecast(self, set_id, forecast_name, contributors, plot_fname, forecast_result):
+        id = self._store_image(plot_fname)
+        if id is None:
+            return None
+
         doc = {
             'name': forecast_name,
             'contributors': contributors,
             'upload_time': datetime.datetime.now().strftime(_date_format),
+            'plot_id': id, 
             'result': forecast_result
         }
         id = self._client.db.forecasts.insert_one(doc).inserted_id
@@ -125,6 +138,27 @@ class DatabaseManager:
             os.remove(os.path.join(self._working_dir, fname))
 
         return set_id
+    
+    def _store_image(self, image_fname):
+        image = Image.open(image_fname)
+        image_bytes = io.BytesIO()
+        image.save(image_bytes, format='PNG')
+        image_doc = {
+            'data': image_bytes.getvalue()
+        }
+
+        id = self._client.db.images.insert_one(image_doc).inserted_id
+        return id
+    
+    def _get_image(self, id, o_fname):
+        image = self._client.db.images.find_one({'_id': id})
+        if image is None:
+            return ""
+
+        pil_img = Image.open(io.BytesIO(image['data']))
+        pil_img.save(o_fname)
+        return o_fname
+
     
     def _import_timeseries_set(self, metadata):
         #First create Dataset and timeseries objects
