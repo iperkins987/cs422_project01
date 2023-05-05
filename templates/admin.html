@@ -5,8 +5,7 @@
 {% block content %}
 
 <div class="row mb-5">
-    <div class="input-group">
-
+    <div class="input-group mb-3">
             <select name="select-dataset" id="select-dataset" class="form-select" form="setDelete">
                 <option value="default" selected>Select a Dataset</option>
 
@@ -17,8 +16,15 @@
             <form id="setDelete" action="admin" method="POST">
                 <input type="submit" value="Remove Time Series Set" class="btn btn-primary">
             </form>
-
     </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </div>
 
 <div id="metadata" style="display:none">

@@ -191,11 +191,14 @@ def help():
 @app.route("/admin", methods = ["POST", "GET"])
 def admin():
 
-    if request.method == "POST":
-        db_manager.delete_timeseries_set(request.form['select-dataset'])
-
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
+
+    if (request.method == "POST"):
+        try:
+            db_manager.delete_timeseries_set(request.form["select-dataset"])
+        except Exception:
+            flash("Error deleting dataset.")
 
     # Load metadata
     if (dataset_id in dataset_ids):
