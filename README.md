@@ -1,6 +1,38 @@
+# About ChronoWave
+
+## Description:
+This is a timeseries data management system. It facilitates the uploading and downloading of timeseries data.
+In addition to data management, it also computes metrics with forecasting data and testing data.
+
+## Authors:
+Isaac Perkins, Aleks Stevens, Cynthia Meneses Cervon, Geoffrey Brendel
+
+## Course:
+CS 422 Project 1
+
+## Directory Structure:
+
+### modules
+modules contains the database manager, our internal data representations, and our metrics computation manager.
+
+### static
+static contains css and javascript files however we only need a css file.
+
+### template
+template contains all html files needed to display content in the browser.
+
+### test_files
+test_files contains various formats of testing datasets and forecast data.
+
+### working
+working is a temporary directory used to store intermediate files.
+
+## Dependencies and Setup
+A list of dependencies is in the file requirements.txt. Follow the steps under "Getting Started" to setup the project.
+
 # Getting Started
 
-## Installing the requiremenets
+## Installing the requirements:
 
 Install the requirements on your machine with:
 
