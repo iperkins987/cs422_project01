@@ -17,10 +17,12 @@ class DatabaseManager:
         self._db_addr = db_addr
         self._client = pymongo.MongoClient(db_addr)
     
+    # Lists the names of all the time series sets in the repository 
     def list_set_ids(self):
         ids = [str(id) for id in self._client.db.timeset.distinct('_id')]
         return ids
     
+    # Retrieves a Forecast object given a forecast ID
     def get_forecast(self, id):
         doc = self._client.db.forecasts.find_one({'_id': ObjectId(id)})
         if doc is None:
@@ -28,9 +30,11 @@ class DatabaseManager:
 
         return Forecast(doc['name'], doc['contributors'], doc['upload_time'], doc['plot_id'], doc['result']) 
     
+    # Retrieves a stored image plot given a plot ID
     def get_plot(self, id, out_fname):
         return self._get_image(ObjectId(id), out_fname)
     
+    # Retrieves a Dataset object given a Dataset ID
     def get_dataset(self, id):
         dataset = self._client.db.datasets.find_one({'_id': ObjectId(id)})
         if dataset is None:
@@ -38,6 +42,7 @@ class DatabaseManager:
 
         return pd.DataFrame(dataset['data'])
     
+    # Retrieves a TimeseriesSet object given a set name
     def get_timeseries_set(self, id):
         doc = self._client.db.timeset.find_one({'_id': id})
         if doc is None:
@@ -52,6 +57,7 @@ class DatabaseManager:
                              doc['link'], doc['timeseries'], task, doc['forecasts'],
                              doc['upload_time'], self.get_timeseries)
     
+    # Deletes a timeseries set given a set name
     def delete_timeseries_set(self, id):
         tset = self.get_timeseries_set(id)
         if tset is None:
@@ -72,6 +78,7 @@ class DatabaseManager:
         self._client.db.timeset.delete_one({'_id': id})
         return True
     
+    # Gets a Timeseries object for a timseries set IDs associated forecasting task
     def get_tasked_timeseries(self, tset_id):
         tset = self.get_timeseries_set(tset_id)
         if tset is None:
@@ -81,6 +88,7 @@ class DatabaseManager:
         timeseries = self.get_timeseries(timeseries_id)
         return timeseries
     
+    # Gets a Timeseries object given a timeseries ID
     def get_timeseries(self, id):
         doc = self._client.db.timeseries.find_one({'_id': ObjectId(id)})
         if doc is None:
@@ -96,6 +104,7 @@ class DatabaseManager:
         return Timeseries(str(doc['_id']), doc['name'], doc['description'], doc['domains'],
                           doc['keywords'], vector, training_dataset, testing_dataset)
     
+    # Stores a forecast given forecast metadata, image file, and results 
     def store_forecast(self, set_id, forecast_name, contributors, plot_fname, forecast_result):
         id = self._store_image(plot_fname)
         if id is None:
@@ -112,6 +121,7 @@ class DatabaseManager:
         self._client.db.timeset.update_one({'_id': set_id}, {'$push': {'forecasts': str(id)}})
         return id
 
+    # Stores a timeseries set given a zip file containing a metadata.json descriptor 
     def store_timeseries_set(self, timeseries_zip_fname):
         #Unzip file
         with zipfile.ZipFile(timeseries_zip_fname, 'r') as file:

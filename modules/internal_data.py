@@ -2,10 +2,12 @@ import os
 import json
 import zipfile
 
+# Constants that enumerate different expected file formats 
 CSV_TYPE = 'csv'
 JSON_TYPE = 'json'
 EXCEL_TYPE = 'xlsx'
 
+# TimeseriesSet contains metadata for a time series set
 class TimeseriesSet:
     def __init__(self, set_name, set_description, domains,
                  keywords, contributors, reference, link,
@@ -30,6 +32,7 @@ class TimeseriesSet:
     def get_timeseries_list(self):
         return self.timeseries
     
+    # Packs up a timeseries sets training data files into a zip file
     def export_to_zip(self, out_dir, out_type=CSV_TYPE):
         files = []
 
@@ -76,6 +79,7 @@ class TimeseriesSet:
         return zip_fname 
 
 
+# Dataset represents a time series data set
 class Dataset:
     def __init__(self, dataset_id, length, period, retriever): 
         self.dataset_id = dataset_id
@@ -83,16 +87,19 @@ class Dataset:
         self.period = period
         self._retriever = retriever
     
+    # load_dataset() returns the dataset as a Pandas Data Frame
     def load_dataset(self):
         if self._retriever is None:
             return None 
         return self._retriever(self.dataset_id)
 
+# Timeseries Descriptor describes the columns in a time series
 class TimeseriesDescriptor:
     def __init__(self, timestep_label, measure_labels):
         self.timestep_label = timestep_label
         self.measure_labels = measure_labels 
 
+# Timeseries contains metadata for a time series
 class Timeseries:
     def __init__(self, timeseries_id, timeseries_name, description, domains,
                  keywords, vector, training_dataset, testing_dataset): 
@@ -114,12 +121,14 @@ class Timeseries:
     def get_timeseries_descriptor(self):
         return self.timeseries_vector
     
+# ForecastingTask describes a forecasting task for a time series set
 class ForecastingTask:
     def __init__(self, reference_id, forecast_period, forecast_count): 
         self.period = forecast_period
         self.count = forecast_count
         self.parent_timeseries_id = reference_id
 
+# Forecast contains metadata relating to an uploaded forecast
 class Forecast:
     def __init__(self, forecast_name, contributors, upload_time, plot_id, results):
         self.name = forecast_name
