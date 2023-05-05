@@ -1,0 +1,33 @@
+{
+    "name": "diabetes_patient_records",
+    "timeseries": [
+        {
+            "name": "diabetes_patient_records",
+            "description": "Diabetes patient records were obtained from two sources: an automatic electronic recording device and paper records. The automatic device had an internal clock to timestamp events, whereas the paper records only provided \"logical time\" slots (breakfast, lunch, dinner, bedtime). For paper records, fixed times were assigned to breakfast (08:00), lunch (12:00), dinner (18:00), and bedtime (22:00). Thus paper records have fictitious uniform recording times whereas electronic records have more realistic time stamps",
+            "domains": ["Medical/Healthcare", "Endocrinology", "Diabetes research", "Public Health", "Epidemiology", "Clinical Trials", "Data Science", "Machine Learning", "Artificial Intelligence", "Biostatistics"],
+            "keywords": ["Diabetes", "Glucose", "Insulin", "Blood sugar", "Hemoglobin A1C", "Continuous glucose monitoring", "Hyperglycemia", "Hypoglycemia", "Diabetic complications", "Time in range", "Diabetes management", "Type 1 diabetes", "Type 2 diabetes", "Gestational diabetes", "Diabetic retinopathy", "Diabetic nephropathy", "Diabetic neuropathy", "Diabetic foot ulcers", "Diabetes medication", "Diet and exercise"],
+            "vector": {
+                "timestep_label": "date_time",
+                "measure_labels": {
+                    "code": "value label",
+                    "value": "value measure"
+                }
+            },
+            "length": 663,
+            "sampling_period": "4h",
+            "training_filename": "data_train.xlsx",
+            "testing_filename": "data_test.xlsx"
+        }
+    ],
+    "task": {
+        "forecast_period": "4h",
+        "count": 664,
+        "timeseries_name": "diabetes_patient_records"
+    },
+    "description": "Diabetes patient records were obtained from two sources: an automatic electronic recording device and paper records. The automatic device had an internal clock to timestamp events, whereas the paper records only provided \"logical time\" slots (breakfast, lunch, dinner, bedtime). For paper records, fixed times were assigned to breakfast (08:00), lunch (12:00), dinner (18:00), and bedtime (22:00). Thus paper records have fictitious uniform recording times whereas electronic records have more realistic time stamps.",
+    "domains": ["Medical/Healthcare", "Endocrinology", "Diabetes research", "Public Health", "Epidemiology", "Clinical Trials", "Data Science", "Machine Learning", "Artificial Intelligence", "Biostatistics"],
+    "keywords": ["Diabetes", "Glucose", "Insulin", "Blood sugar", "Hemoglobin A1C", "Continuous glucose monitoring", "Hyperglycemia", "Hypoglycemia", "Diabetic complications", "Time in range", "Diabetes management", "Type 1 diabetes", "Type 2 diabetes", "Gestational diabetes", "Diabetic retinopathy", "Diabetic nephropathy", "Diabetic neuropathy", "Diabetic foot ulcers", "Diabetes medication", "Diet and exercise"],
+    "contributors": ["Isaac Kohane"],
+    "reference": "Michael Kahn, MD, PhD, Washington University, St. Louis, MO",
+    "link": "https://archive.ics.uci.edu/ml/datasets/Diabetes"
+}
