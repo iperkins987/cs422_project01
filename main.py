@@ -28,6 +28,13 @@ def allowed_file(filename):
     return ('.' in filename) and valid_type
 
 
+# Clear contents of working dir
+def clean_working():
+    for fname in os.listdir(app.config["WORKING_DIR"]):
+        if (fname != ".gitkeep"):
+            os.remove(os.path.join(app.config["WORKING_DIR"], fname))
+
+
 # Render home/index page
 @app.route("/home")
 @app.route("/")
@@ -62,6 +69,8 @@ def upload_data():
 def upload_forecast():
     dataset_ids = db_manager.list_set_ids()
 
+    clean_working()
+
     if (request.method == "POST"):
         if (request.files):
             file = request.files["dataset"]
@@ -91,6 +100,8 @@ def upload_forecast():
 def download_data():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
+
+    clean_working()
 
     # Load metadata
     if (dataset_id):
@@ -133,6 +144,8 @@ def performance_metrics():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
     forecast_name = request.args.get("forecast_name")
+
+    clean_working()
 
     # Get forecast names
     if (dataset_id in dataset_ids):
