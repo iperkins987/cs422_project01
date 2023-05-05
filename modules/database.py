@@ -135,7 +135,8 @@ class DatabaseManager:
 
         #Clear working directory
         for fname in os.listdir(self._working_dir):
-            os.remove(os.path.join(self._working_dir, fname))
+            if (fname != ".gitkeep"):
+                os.remove(os.path.join(self._working_dir, fname))
 
         return set_id
     
