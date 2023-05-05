@@ -73,10 +73,20 @@ class DataAnalyzer:
         # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
 
     # Plotting results
-    def plot_results(self, actual_col: str, predicted_col: str) -> None:
-        df = self.read_data()
-        actual = df[actual_col].values
-        predicted = df[predicted_col].values
+    def plot_results(self) -> None:
+        index_col = self.time_series.get_timeseries_descriptor().timestep_label
+
+        actual = self.time_series.get_testing_metadata().load_dataset()
+        predicted = self.read_data()
+
+        if (actual.shape[0] > predicted.shape[0]):
+            actual = actual[actual[index_col].isin(predicted[index_col])]
+
+        elif (actual.shape[0] < predicted.shape[0]):
+            predicted = predicted[predicted[index_col].isin(actual[index_col])]
+
+        actual = actual.drop(columns=index_col)
+        predicted = predicted.drop(columns=index_col)
         
         # Scatter plot of actual vs predicted values
         plt.scatter(actual, predicted, alpha=0.5)
@@ -91,7 +101,7 @@ class DataAnalyzer:
         plt.grid(True)
 
         # Save plot in a PNG file in the current directory
-        plt.savefig('plot.png')
+        plot_name = self.file_path.split(".")[0] + ".png"
+        plt.savefig(plot_name)
 
-        # Show plot
-        plt.show()
+        return plot_name

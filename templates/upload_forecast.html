@@ -8,7 +8,7 @@
 <!-- Block title and block description -->
 {% extends "base.html" %}
 {% block title %} Upload Forecast {% endblock %}
-{% block description %} Store forcast results for model analysis. {% endblock %}
+{% block description %} Store forecast results for model analysis. {% endblock %}
 
 <!-- Block content -->
 {% block content %}
@@ -17,7 +17,7 @@
     <p style= "font-family: 'Open Sans', sans-serif;">Select the dataset you would like to upload forecasting results for.</p>
 </div>
 
-<form action="/upload_forcast" method="POST" enctype = "multipart/form-data">
+<form action="/upload_forecast" method="POST" enctype = "multipart/form-data">
     <div class="mb-3">
         <label for="select-dataset" class="form-label">Select a dataset</label>
         <select id="select-dataset" name="dataset-name" class="form-select">
@@ -30,13 +30,13 @@
     </div>
 
     <div class="mb-3">
-        <label for="forcast-name" class="form-label">The name of the forecast</label>
-        <input id="forcast-name" name="forcast-name" type="text" class="form-control" placeholder="Forcast Name">
+        <label for="forecast-name" class="form-label">The name of the forecast</label>
+        <input id="forecast-name" name="forecast-name" type="text" class="form-control" placeholder="forecast Name">
     </div>
 
     <div class="mb-3">
-        <label for="forcast-contributors"" class="form-label">Add forecast contributors seperated by a comma</label>
-        <input id="forcast-contributors" name="forcast-contributors" type="text" class="form-control" placeholder="Forcast Contributors">
+        <label for="forecast-contributors"" class="form-label">Add forecast contributors seperated by a comma</label>
+        <input id="forecast-contributors" name="forecast-contributors" type="text" class="form-control" placeholder="forecast Contributors">
     </div>
 
     <div class="mb-3">

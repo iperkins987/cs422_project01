@@ -15,11 +15,13 @@
 <!-- Block content -->
 {% block content %}
 
-<p style= "font-family: 'Open Sans', sans-serif;">On this page you will find plots that summarize the performance of your time series data, helping you<br>
-to understand patterns, trends, and potential issues. <br>
-<br>
-Our advanced algorithms automatically compute a range of performance metrics, including mean absolute error,<br>
-mean average percentage error, correlation coefficient, and more, providing you with accurate and reliable results. </p>
+<div class="mb-5">
+    <p style= "font-family: 'Open Sans', sans-serif;">On this page you will find plots that summarize the performance of your time series data, helping you<br>
+    to understand patterns, trends, and potential issues. <br>
+    <br>
+    Our advanced algorithms automatically compute a range of performance metrics, including mean absolute error,<br>
+    mean average percentage error, correlation coefficient, and more, providing you with accurate and reliable results. </p>
+</div>
 
 <!-- Search bar -->
 <div class="row mb-5">
@@ -31,178 +33,53 @@ mean average percentage error, correlation coefficient, and more, providing you 
                 <option value="{{name}}">{{name}}</option>
             {% endfor %}
         </select>
-        <select id="select-forecast" class="form-select" style="display:none">
-            <option value="default" name="default">Select A Forecast To View Metrics</option>
+        <select id="select-forecast" class="form-select">
+            <option class="stay" value="default" name="default">Select a Forecast To View Metrics</option>
         </select>
     </div>
 </div>
 
-<div id="metadata" style="display:none">
-    <div class="row mb-5">
-        <div class="col">
-            <h4>Description</h4>
-            <p id="description"></p>
-        </div>
-        <div class="col">
-            <h4>Reference</h4>
-            <p id="reference"></p>
-        </div>
-        <div class="col">
-            <h4>Link</h4>
-            <p id="link"></p>
-        </div>
+<div id="metrics" class="row" style="display: none;">
+    <div class="col">
+        <ul class="list-group">
+            <li class="list-group-item">MAE: <span id="mae"></span></li>
+            <li class="list-group-item">MAPE: <span id="mape"></span></li>
+            <li class="list-group-item">SMAPE: <span id="smape"></span></li>
+            <li class="list-group-item">MSE: <span id="mse"></span></li>
+            <li class="list-group-item">RMSE: <span id="rmse"></span></li>
+            <li class="list-group-item">Corr Coeff: <span id="corr"></span></li>
+        </ul>
     </div>
-    <div class="row">
-        <div class="col">
-            <h4>Contributors</h4>
-            <ul id="contributors" class="list-group"></ul>
-        </div>
-        <div class="col">
-            <h4>Keywords</h4>
-            <ul id="keywords" class="list-group"></ul>
-        </div>
-        <div class="col">
-            <h4>Domains</h4>
-            <ul id="domains" class="list-group"></ul>
-        </div>
+
+    <div class="col">
+        <img id="graph">
     </div>
 </div>
 
-<div id="metrics" style="display: none;">
-    <div class="row mb-5">
-        <div class="col">
-            <h4>MAE</h4>
-            <p id="mae"></p>
-        </div>
-        <div class="col">
-            <h4>MAPE</h4>
-            <p id="mape"></p>
-        </div>
-        <div class="col">
-            <h4>SMAPE</h4>
-            <p id="smape"></p>
-        </div>
-        <div class="col">
-            <h4>MSE</h4>
-            <p id="mse"></p>
-        </div>
-        <div class="col">
-            <h4>RMSE</h4>
-            <p id="rmse"></p>
-        </div>
-        <div class="col">
-            <h4>Corr Coeff</h4>
-            <p id="corr"></p>
-        </div>
-    </div>
-</div>
 
 <script>
-    function clear_contents() {
-        $("#metadata").hide();
-        $("#contributors").html("");
-        $("#keywords").html("");
-        $("#domains").html("");
-
-        $("#metrics").hide();
-        $("#mae").html("");
-        $("#mape").html("");
-        $("#smape").html("");
-        $("#mse").html("");
-        $("#rmse").html("");
-        $("#corr").html("");
-    }
-
-    function render_metadata(response) {
-        // Update description
-        $("#description").text(response.description);
-
-        $("#reference").text(response.reference)
-        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
-
-        // Update contributors
-        response.contributors.forEach(item => {
-            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update contributors
-        response.keywords.forEach(item => {
-            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update contributors
-        response.domains.forEach(item => {
-            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        $("#select-forecast").empty()
-        $("#select-forecast").append("<option value='default' name='default'>Select A Forecast To View Metrics</option>")
-        response.forecasts.forEach(item => {
-            $("#select-forecast").append("<option value='" + item + "' name='"+ item +"'>"+ item +"</option>")
-        })
-
-        $("#select-forecast").show()
-    }
-
-
-    function render_metrics(response){
-        // Update description
-        $("#description").text(response.description);
-
-        $("#reference").text(response.reference)
-        $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
-
-        // Update contributors
-        response.contributors.forEach(item => {
-            $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update contributors
-        response.keywords.forEach(item => {
-            $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
-        });
-
-        // Update contributors
-        response.domains.forEach(item => {
-            $("#domains").append("<li class='list-group-item'>" + item + "</li>")
-        });
+    function render_metrics(response) {
+        metrics = response.metrics;
+        
+        $("#metrics").show();
 
         //update mae
-        $("#mae").text(response.mae);
+        $("#mae").text(metrics.mae);
         //update mape
-        $("#mape").text(response.mape);
+        $("#mape").text(metrics.mape);
         //update smape
-        $("#smape").text(response.smape);
+        $("#smape").text(metrics.smape);
         //update mse
-        $("#mse").text(response.mse);
+        $("#mse").text(metrics.mse);
         //update rmse
-        $("#rmse").text(response.rmse);
+        $("#rmse").text(metrics.rmse);
         //update corr coeff
-        $("#corr").text(response.corr)
+        $("#corr").text(metrics.corr);
+
+        $("#graph").attr("src", "/working/" + metrics.graph);
     }
 
     $(document).ready(function() {
-
-        // View selected metadata
-        $("#select-dataset").change(function() {
-            $.ajax({
-                url: "",
-                type: "get",
-                contentType: "application/json",
-                data: {
-                    dataset_id: $("#select-dataset").val(), forecast_name: $("select-forecast").val()
-                },
-                success: function(response) {
-                    if (response) {
-                        clear_contents();
-                        $("#metadata").show();
-                        render_metadata(response);
-                    } else {
-                        clear_contents();
-                    }
-                }
-            });
-        });
 
         $("#select-forecast").change(function() {
             $.ajax({
@@ -210,19 +87,36 @@ mean average percentage error, correlation coefficient, and more, providing you 
                 type: "get",
                 contentType: "application/json",
                 data: {
-                    dataset_id: $("#select-dataset").val(), 
-                    forecast_name: $("#select-forecast").val()
+                    forecast_name: $("#select-forecast").val(),
+                    dataset_id: $("#select-dataset").val(),
                 },
                 success: function(response) {
-                    if (response) {
-                        clear_contents()
-                        $("#metadata").show()
-                        if (response.mae) {
-                            $("#metrics").show();
-                        }
-                        render_metrics(response);
-                    } else {
-                        clear_contents();
+                    if (response.metrics) {
+                        render_metrics(response)
+                    }
+                },
+            });
+        });
+
+        // View forecast sets
+        $("#select-dataset").change(function() {
+
+            // Remove all list items except for default and hide metrics
+            $("#select-forecast").find("*").not(".stay").remove();
+            $("#metrics").hide();
+
+            $.ajax({
+                url: "",
+                type: "get",
+                contentType: "application/json",
+                data: {
+                    dataset_id: $("#select-dataset").val(), 
+                },
+                success: function(response) {
+                    if (response.forecast_names) {
+                        response.forecast_names.forEach(item => {
+                            $("#select-forecast").append("<option value='" + item + "' name='"+ item +"'>"+ item +"</option>");
+                        });
                     }
                 }
             });
