@@ -3,7 +3,7 @@ Creator: Aleksandr Stevens
 Team: Group 3
 Last Modification Date: 05/04/2023
 Description:
-    This is the internal data structures used to represents different 
+    This is the internal data structures used to represents different
     types of data and metadata for timeseries sets, timeseries, datasets,
     forecasts, etc
 """
@@ -11,7 +11,7 @@ import os
 import json
 import zipfile
 
-# Constants that enumerate different expected file formats 
+# Constants that enumerate different expected file formats
 CSV_TYPE = 'csv'
 JSON_TYPE = 'json'
 EXCEL_TYPE = 'xlsx'
@@ -22,7 +22,7 @@ class TimeseriesSet:
                  keywords, contributors, reference, link,
                  timeseries, forecast_task, forecast_ids,
                  upload_time, retriever):
-        self.upload_time = upload_time 
+        self.upload_time = upload_time
         self.name = set_name
         self.description = set_description
         self.domains = domains
@@ -31,22 +31,22 @@ class TimeseriesSet:
         self.reference = reference
         self.link = link
         self.timeseries = timeseries #Set of Timeseries instances
-        self.task = forecast_task 
-        self.forecast_ids = forecast_ids 
+        self.task = forecast_task
+        self.forecast_ids = forecast_ids
         self._retriever = retriever
-    
+
     def get_forecast_ids(self):
         return self.forecast_ids
-    
+
     def get_timeseries_list(self):
         return self.timeseries
-    
+
     # Packs up a timeseries sets training data files into a zip file
     def export_to_zip(self, out_dir, out_type=CSV_TYPE):
         files = []
 
         forecast_info = {
-            "forecast_period": self.task.period, 
+            "forecast_period": self.task.period,
             "forecast_count": self.task.count
         }
 
@@ -71,10 +71,10 @@ class TimeseriesSet:
                 with open(train_fname, "w") as outfile:
                     outfile.write(train_data)
             files.append(train_fname)
-        
+
         info_fname = os.path.join(out_dir, "forecast_info.json")
         with open(info_fname, "w") as outfile:
-            json.dump(forecast_info, outfile) 
+            json.dump(forecast_info, outfile)
         files.append(info_fname)
 
 
@@ -82,36 +82,36 @@ class TimeseriesSet:
         with zipfile.ZipFile(zip_fname, "w") as zfile:
             for file_name in files:
                 zfile.write(file_name, os.path.basename(file_name))
-        
+
         for file_name in files:
             os.remove(file_name)
-        return zip_fname 
+        return zip_fname
 
 
 # Dataset represents a time series data set
 class Dataset:
-    def __init__(self, dataset_id, length, period, retriever): 
+    def __init__(self, dataset_id, length, period, retriever):
         self.dataset_id = dataset_id
         self.length = length
         self.period = period
         self._retriever = retriever
-    
+
     # load_dataset() returns the dataset as a Pandas Data Frame
     def load_dataset(self):
         if self._retriever is None:
-            return None 
+            return None
         return self._retriever(self.dataset_id)
 
 # Timeseries Descriptor describes the columns in a time series
 class TimeseriesDescriptor:
     def __init__(self, timestep_label, measure_labels):
         self.timestep_label = timestep_label
-        self.measure_labels = measure_labels 
+        self.measure_labels = measure_labels
 
 # Timeseries contains metadata for a time series
 class Timeseries:
     def __init__(self, timeseries_id, timeseries_name, description, domains,
-                 keywords, vector, training_dataset, testing_dataset): 
+                 keywords, vector, training_dataset, testing_dataset):
         self.timeseries_id = timeseries_id
         self.name = timeseries_name
         self.description = description
@@ -120,19 +120,19 @@ class Timeseries:
         self.timeseries_vector = vector
         self.training_dataset = training_dataset
         self.testing_dataset = testing_dataset
-    
+
     def get_training_metadata(self):
         return self.training_dataset
-        
+
     def get_testing_metadata(self):
         return self.testing_dataset
-        
+
     def get_timeseries_descriptor(self):
         return self.timeseries_vector
-    
+
 # ForecastingTask describes a forecasting task for a time series set
 class ForecastingTask:
-    def __init__(self, reference_id, forecast_period, forecast_count): 
+    def __init__(self, reference_id, forecast_period, forecast_count):
         self.period = forecast_period
         self.count = forecast_count
         self.parent_timeseries_id = reference_id
@@ -144,4 +144,4 @@ class Forecast:
         self.contributors = contributors
         self.upload_time = upload_time
         self.plot_id = plot_id
-        self.forecast_results = results 
+        self.forecast_results = results

@@ -21,26 +21,26 @@ class DataAnalyzer:
     def read_data(self) -> pd.DataFrame:
         # Get the file extension by splitting by the point
         file_type = self.file_path.rsplit('.', 1)[1].lower()
-        
+
         # Check for file type and process as necessary
         if file_type == 'json':
             with open(self.file_path) as file:
                 data = json.load(file)
             df = pd.json_normalize(data)
-            
+
         elif file_type == 'csv':
             df = pd.read_csv(self.file_path)
-            
+
         elif file_type == 'xlsx':
             wb = openpyxl.load_workbook(self.file_path)
             sheet = wb.active
             rows = sheet.values
             columns = next(rows)
             df = pd.DataFrame(rows, columns=columns)
-            
+
         return df
 
-    #  Calculate the performance metrics and return them as a dictionary.        
+    #  Calculate the performance metrics and return them as a dictionary.
     def calculate_metrics(self) -> Dict[str, Union[float, np.ndarray]]:
         index_col = self.time_series.get_timeseries_descriptor().timestep_label
 
@@ -61,14 +61,14 @@ class DataAnalyzer:
         smape = 2 * np.mean(np.abs(predicted - actual) / (np.abs(actual) + np.abs(predicted))) * 100
         mse = mean_squared_error(actual, predicted)
         rmse = np.sqrt(mse)
-    
+
         # Calculating the correlation coefficient
         # Check if the actual and predicted datasets are empty, have null values, or has only 1 element. If they are then return NaN
         if len(actual) > 1 and len(predicted) > 1:
             corr = np.corrcoef(np.array(actual).flatten(), np.array(predicted).flatten())[0, 1]
         else:
             corr = np.nan
-        
+
         return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse, "corr": corr}
         # return {"MAE": mae, "MAPE": mape, "SMAPE": smape, "MSE": mse, "RMSE": rmse}
 
@@ -87,13 +87,13 @@ class DataAnalyzer:
 
         actual = actual.drop(columns=index_col)
         predicted = predicted.drop(columns=index_col)
-        
+
         # Scatter plot of actual vs predicted values
         plt.scatter(actual, predicted, alpha=0.5)
 
         # Add line representing perfect predictions
         plt.plot(np.linspace(np.min(actual), np.max(actual)), np.linspace(np.min(actual), np.max(actual)), c='r')
-        
+
         # Add labels and title
         plt.xlabel("Actual Values")
         plt.ylabel("Predicted Values")

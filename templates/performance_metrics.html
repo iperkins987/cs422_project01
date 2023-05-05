@@ -60,7 +60,7 @@
 <script>
     function render_metrics(response) {
         metrics = response.metrics;
-        
+
         $("#metrics").show();
 
         //update mae
@@ -110,7 +110,7 @@
                 type: "get",
                 contentType: "application/json",
                 data: {
-                    dataset_id: $("#select-dataset").val(), 
+                    dataset_id: $("#select-dataset").val(),
                 },
                 success: function(response) {
                     if (response.forecast_names) {
