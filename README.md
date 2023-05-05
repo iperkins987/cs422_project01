@@ -1,15 +1,11 @@
 # Getting Started
 
-To clone the repository first make sure you have added your ssh public key to your github profile and then run:
+## Installing the requiremenets
 
-### `git clone --shared git@github.com:iperkins987/cs422_project01.git`
+Install the requirements on your machine with:
 
-## Setting up Flask
-
-Install Flask on your machine with:
-
-### Windows: `pip install flask`
-### Mac or Linux: `pip3 install flask`
+### Windows: `pip install -r requirements.txt`
+### Mac or Linux: `pip3 install -r requirements.txt`
 
 ## How to Run:
 
@@ -19,7 +15,3 @@ To launch the site just run the following:
 ### Mac or Linux: `python3 main.py`
 
 The url should be displayed in the terminal it should be http://127.0.0.1:5000
-
-## Things to Keep in Mind
-
-Always pull the repository before commiting changes and make frequent commits and pushes to keep the repository up to date. If you have any weird git errors please let me know so we don't mess up the repository.
