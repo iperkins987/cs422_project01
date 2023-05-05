@@ -81,14 +81,21 @@ def upload_forecast():
                 file.save(file_path)
 
             time_series = db_manager.get_tasked_timeseries(request.form["dataset-name"])
-            data_analyzer = DataAnalyzer(time_series, file_path)
             dataset_name = request.form["dataset-name"]
             forecast_name = request.form["forecast-name"]
             contributors = request.form["forecast-contributors"].split(",")
-            metrics = data_analyzer.calculate_metrics()
-            plot_name = data_analyzer.plot_results()
 
-            db_manager.store_forecast(dataset_name, forecast_name, contributors, plot_name, metrics)
+            try:
+                data_analyzer = DataAnalyzer(time_series, file_path)
+                metrics = data_analyzer.calculate_metrics()
+                plot_name = data_analyzer.plot_results()
+            except Exception as e:
+                flash("Metadata fields do not match. Check the headers.")
+            else:
+                try:
+                    db_manager.store_forecast(dataset_name, forecast_name, contributors, plot_name, metrics)
+                except Exception as e:
+                    flash("Failed to upload forcast.")
 
         return redirect(request.url)
 

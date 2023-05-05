@@ -22,7 +22,7 @@
         <label for="select-dataset" class="form-label">Select a dataset</label>
         <select id="select-dataset" name="dataset-name" class="form-select">
             <option value="default" selected>Select a Dataset</option>
-            
+
             {% for name in dataset_ids %}
                 <option value="{{name}}">{{name}}</option>
             {% endfor %}
@@ -43,6 +43,14 @@
         <label for="file-upload" class="form-label">Upload forecast file</label>
         <input id="file-upload" class="form-control" name="dataset" type="file">
     </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <button type="submit" class="btn btn-primary">Upload</button>
 </form>
