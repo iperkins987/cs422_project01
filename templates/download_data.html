@@ -115,9 +115,11 @@
                     dataset_id: $("#select-dataset").val()
                 },
                 success: function(response) {
-                    if (response) {
+                    if (response.metadata) {
                         $("#metadata").show();
-                        render_metadata(response)
+                        render_metadata(response.metadata)
+                    } else {
+                        $("#metadata").hide();
                     }
                 }
             });

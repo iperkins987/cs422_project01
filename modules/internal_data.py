@@ -41,6 +41,19 @@ class TimeseriesSet:
     def get_timeseries_list(self):
         return self.timeseries
 
+    # Returns the set attributes in a json format
+    def get_json(self):
+        metadata = {
+            "description" : self.description,
+            "domains" : self.domains,
+            "keywords" : self.keywords,
+            "contributors" : self.contributors,
+            "reference" : self.reference,
+            "link" : self.link
+        }
+
+        return metadata
+
     # Packs up a timeseries sets training data files into a zip file
     def export_to_zip(self, out_dir, out_type=CSV_TYPE):
         files = []
@@ -129,6 +142,7 @@ class Timeseries:
 
     def get_timeseries_descriptor(self):
         return self.timeseries_vector
+
 
 # ForecastingTask describes a forecasting task for a time series set
 class ForecastingTask:

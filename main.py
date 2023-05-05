@@ -106,14 +106,8 @@ def download_data():
     # Load metadata
     if (dataset_id in dataset_ids):
         ts_set = db_manager.get_timeseries_set(dataset_id)
-        metadata = {
-            "description" : ts_set.description,
-            "domains" : ts_set.domains,
-            "keywords" : ts_set.keywords,
-            "contributors" : ts_set.contributors,
-            "reference" : ts_set.reference,
-            "link" : ts_set.link
-        }
+        metadata = ts_set.get_json()
+        metadata = {"metadata" : metadata}
 
         return jsonify(metadata)
 
@@ -187,20 +181,12 @@ def admin():
 
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
+
     # Load metadata
-    if (dataset_id):
-        if (dataset_id == "default"):
-            metadata = False
-        else:
-            ts_set = db_manager.get_timeseries_set(dataset_id)
-            metadata = {
-                "description" : ts_set.description,
-                "domains" : ts_set.domains,
-                "keywords" : ts_set.keywords,
-                "contributors" : ts_set.contributors,
-                "reference" : ts_set.reference,
-                "link" : ts_set.link
-            }
+    if (dataset_id in dataset_ids):
+        ts_set = db_manager.get_timeseries_set(dataset_id)
+        metadata = ts_set.get_json()
+        metadata = {"metadata" : metadata}
 
         return jsonify(metadata)
 

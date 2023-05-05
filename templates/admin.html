@@ -6,7 +6,7 @@
 
 <div class="row mb-5">
     <div class="input-group">
-        
+
             <select name="select-dataset" id="select-dataset" class="form-select" form="setDelete">
                 <option value="default" selected>Select a Dataset</option>
 
@@ -17,7 +17,7 @@
             <form id="setDelete" action="admin" method="POST">
                 <input type="submit" value="Remove Time Series Set" class="btn btn-primary">
             </form>
-        
+
     </div>
 </div>
 
@@ -68,16 +68,19 @@
         $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
 
         // Update contributors
+        $("#contributors").empty()
         response.contributors.forEach(item => {
             $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
         });
 
         // Update contributors
+        $("#keywords").empty()
         response.keywords.forEach(item => {
             $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
         });
 
         // Update contributors
+        $("#domains").empty()
         response.domains.forEach(item => {
             $("#domains").append("<li class='list-group-item'>" + item + "</li>")
         });
@@ -95,12 +98,11 @@
                     dataset_id: $("#select-dataset").val()
                 },
                 success: function(response) {
-                    if (response) {
-                        clear_contents();
+                    if (response.metadata) {
                         $("#metadata").show();
-                        render_metadata(response)
+                        render_metadata(response.metadata)
                     } else {
-                        clear_contents();
+                        $("#metadata").hide();
                     }
                 }
             });
