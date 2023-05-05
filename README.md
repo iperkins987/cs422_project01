@@ -30,7 +30,11 @@ working is a temporary directory used to store intermediate files.
 ### documents
 documents contains all project documents such as SRS, SDS, ect.
 
-## Dependencies and Setup
+## Usage:
+Each page has instructions on how to use the tools and there is a help page located at the bottom
+of the navigation bar for further assistance.
+
+## Dependencies and Setup:
 A list of dependencies is in the file requirements.txt. Follow the steps under "Getting Started" to setup the project.
 
 # Getting Started
