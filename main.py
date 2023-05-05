@@ -21,18 +21,21 @@ db_password = "ybU62Wj58oNqTm0h"
 db_manager = DatabaseManager(working_dir=app.config["WORKING_DIR"], db_addr=f"mongodb+srv://{db_user}:{db_password}@chronowave.yufcjqt.mongodb.net/?retryWrites=true&w=majority")
 
 
+# Check if a filename is one of the accepted files in app.config["ALLOWED_EXTENSIONS"]
 def allowed_file(filename):
     file_type = filename.rsplit('.', 1)[1].lower()
     valid_type = file_type in app.config["ALLOWED_EXTENSIONS"]
     return ('.' in filename) and valid_type
 
 
+# Render home/index page
 @app.route("/home")
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
+# Render upload page and collect timeseries data
 @app.route("/upload_data", methods=["POST", "GET"])
 def upload_data():
     if (request.method == "POST"):
@@ -54,6 +57,7 @@ def upload_data():
     return render_template("upload_data.html")
 
 
+# Render upload forcast page and collect forcast data
 @app.route("/upload_forecast", methods=["POST", "GET"])
 def upload_forecast():
     dataset_ids = db_manager.list_set_ids()
@@ -82,10 +86,12 @@ def upload_forecast():
     return render_template("upload_forecast.html", dataset_ids=dataset_ids)
 
 
+# Render download page and send test data for download
 @app.route("/download_data", methods=["POST", "GET"])
 def download_data():
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")
+
     # Load metadata
     if (dataset_id):
         if (dataset_id == "default"):
@@ -106,6 +112,7 @@ def download_data():
     return render_template("download_data.html", dataset_ids=dataset_ids)
 
 
+# Download timeseries data as specified type
 @app.route("/download_as_type", methods=["POST", "GET"])
 def download_type():
     file_map = {"csv" : CSV_TYPE, "excel" : EXCEL_TYPE, "json" : JSON_TYPE}
@@ -120,6 +127,7 @@ def download_type():
     return redirect(url_for("download_data"))
 
 
+# Render performance metrics page with pre-calculated metrics
 @app.route("/performance_metrics", methods=['GET', 'POST'])
 def performance_metrics():
     dataset_ids = db_manager.list_set_ids()
@@ -154,12 +162,13 @@ def performance_metrics():
     return render_template("performance_metrics.html", dataset_ids=dataset_ids)
 
 
-
+# Render help page
 @app.route("/help")
 def help():
     return render_template("help.html")
 
 
+# Render admin page and delete data as requested
 @app.route("/admin", methods = ["POST", "GET"])
 def admin():
 
