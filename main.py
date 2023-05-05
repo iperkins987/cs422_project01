@@ -104,19 +104,16 @@ def download_data():
     clean_working()
 
     # Load metadata
-    if (dataset_id):
-        if (dataset_id == "default"):
-            metadata = False
-        else:
-            ts_set = db_manager.get_timeseries_set(dataset_id)
-            metadata = {
-                "description" : ts_set.description,
-                "domains" : ts_set.domains,
-                "keywords" : ts_set.keywords,
-                "contributors" : ts_set.contributors,
-                "reference" : ts_set.reference,
-                "link" : ts_set.link
-            }
+    if (dataset_id in dataset_ids):
+        ts_set = db_manager.get_timeseries_set(dataset_id)
+        metadata = {
+            "description" : ts_set.description,
+            "domains" : ts_set.domains,
+            "keywords" : ts_set.keywords,
+            "contributors" : ts_set.contributors,
+            "reference" : ts_set.reference,
+            "link" : ts_set.link
+        }
 
         return jsonify(metadata)
 
@@ -187,7 +184,6 @@ def admin():
 
     if request.method == "POST":
         db_manager.delete_timeseries_set(request.form['select-dataset'])
-
 
     dataset_ids = db_manager.list_set_ids()
     dataset_id = request.args.get("dataset_id")

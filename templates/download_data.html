@@ -77,13 +77,6 @@
 </div>
 
 <script>
-    function clear_contents() {
-        $("#metadata").hide();
-        $("#contributors").html("");
-        $("#keywords").html("");
-        $("#domains").html("");
-    }
-
     function render_metadata(response) {
         // Update description
         $("#description").text(response.description);
@@ -92,16 +85,19 @@
         $("#link").html("<a href='" + response.link + "' target='_blank'>" + response.link + "</a>");
 
         // Update contributors
+        $("#contributors").empty()
         response.contributors.forEach(item => {
             $("#contributors").append("<li class='list-group-item'>" + item + "</li>")
         });
 
         // Update contributors
+        $("#keywords").empty()
         response.keywords.forEach(item => {
             $("#keywords").append("<li class='list-group-item'>" + item + "</li>")
         });
 
         // Update contributors
+        $("#domains").empty()
         response.domains.forEach(item => {
             $("#domains").append("<li class='list-group-item'>" + item + "</li>")
         });
@@ -120,11 +116,8 @@
                 },
                 success: function(response) {
                     if (response) {
-                        clear_contents();
                         $("#metadata").show();
                         render_metadata(response)
-                    } else {
-                        clear_contents();
                     }
                 }
             });
@@ -138,7 +131,7 @@
             window.location.href = "download_as_type?file_type=" + file_type + "&dataset_id=" + dataset_id;
         });
     });
-    
+
 </script>
 
 {% endblock %}
