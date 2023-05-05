@@ -1,3 +1,9 @@
+"""
+Creator: Aleksandr Stevens
+Team: Group 3
+Last Modification Date: 05/04/2023
+Description: This is the DatabaseManager class outlined in the SDS
+"""
 import io
 import os
 import json

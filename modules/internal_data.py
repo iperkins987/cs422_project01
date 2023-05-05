@@ -1,3 +1,12 @@
+"""
+Creator: Aleksandr Stevens
+Team: Group 3
+Last Modification Date: 05/04/2023
+Description:
+    This is the internal data structures used to represents different 
+    types of data and metadata for timeseries sets, timeseries, datasets,
+    forecasts, etc
+"""
 import os
 import json
 import zipfile
