@@ -27,6 +27,9 @@ test_files contains various formats of testing datasets and forecast data.
 ### working
 working is a temporary directory used to store intermediate files.
 
+### documents
+documents contains all project documents such as SRS, SDS, ect.
+
 ## Dependencies and Setup
 A list of dependencies is in the file requirements.txt. Follow the steps under "Getting Started" to setup the project.
 
