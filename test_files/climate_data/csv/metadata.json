@@ -1,0 +1,35 @@
+{
+    "name": "climate_records",
+    "timeseries": [
+        {
+            "name": "climate_records",
+            "description": "The Dataset is fully dedicated for the developers who want to train the model on Weather Forecasting for Indian climate. This dataset provides data from 1st January 2013 to 24th April 2017 in the city of Delhi, India. The 4 parameters here are meantemp, humidity, wind_speed, meanpressure.",
+            "domains": ["Medical/Healthcare", "Endocrinology", "Diabetes research", "Public Health", "Epidemiology", "Clinical Trials", "Data Science", "Machine Learning", "Artificial Intelligence", "Biostatistics"],
+            "keywords": ["weather", "timeseries", "data", "JSON", "format", "temperature", "humidity", "precipitation", "wind speed", "atmospheric pressure", "forecast"],
+            "vector": {
+                "timestep_label": "date",
+                "measure_labels": {
+                    "meantemp" : "Average temperature C",
+                    "humidity" : "grams of water vapor per cubic meter volume of air",
+                    "wind_speed" : "kmph",
+                    "meanpressure" : "atm"
+                }
+            },
+            "length": 731,
+            "sampling_period": "1d",
+            "training_filename": "data_train.csv",
+            "testing_filename": "data_test.csv"
+        }
+    ],
+    "task": {
+        "forecast_period": "1d",
+        "count": 731,
+        "timeseries_name": "climate_records"
+    },
+    "description": "The Dataset is fully dedicated for the developers who want to train the model on Weather Forecasting for Indian climate. This dataset provides data from 1st January 2013 to 24th April 2017 in the city of Delhi, India. The 4 parameters here are meantemp, humidity, wind_speed, meanpressure.",
+    "domains": ["Medical/Healthcare", "Endocrinology", "Diabetes research", "Public Health", "Epidemiology", "Clinical Trials", "Data Science", "Machine Learning", "Artificial Intelligence", "Biostatistics"],
+    "keywords": ["weather", "timeseries", "data", "JSON", "format", "temperature", "humidity", "precipitation", "wind speed", "atmospheric pressure", "forecast"],
+    "contributors": [],
+    "reference": "Weather Undergroud API",
+    "link": "https://www.kaggle.com/datasets/sumanthvrao/daily-climate-time-series-data?resource=download"
+}
