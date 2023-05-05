@@ -1,3 +1,11 @@
+"""
+Creators: Isaac Perkins, Geoffrey Brendel
+Team: Group 3
+Last Modification Date: 05/05/2023
+Description:
+    This page routes the html files and collects input.
+"""
+
 from flask import Flask, render_template, request, url_for, redirect, jsonify, send_file, flash
 from werkzeug.utils import secure_filename
 import os
